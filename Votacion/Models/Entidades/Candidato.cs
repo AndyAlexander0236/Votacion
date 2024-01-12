@@ -21,11 +21,11 @@ namespace Votacion.Models.Entidades
         public DateTime FechaRegistro { get; set; }
 
         // Claves foráneas
-        public int IdEleccion1 { get; set; }
+        //public int IdEleccion1 { get; set; }
         [ForeignKey("IdEleccion")]
         public virtual Eleccion? Eleccion { get; set; }
 
-        public int IdUsuarioR { get; set; }
+       // public int IdUsuarioR { get; set; }
         [ForeignKey("IdUsuario")]
         public virtual Usuario? Usuario { get; set; }
     }

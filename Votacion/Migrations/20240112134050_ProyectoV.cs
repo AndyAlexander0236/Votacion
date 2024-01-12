@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Votacion.Migrations
 {
     /// <inheritdoc />
-    public partial class Proyecto1 : Migration
+    public partial class ProyectoV : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,6 @@ namespace Votacion.Migrations
                     Cargo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdUsuarioR = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -64,9 +63,7 @@ namespace Votacion.Migrations
                     RutaImagen = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEleccion1 = table.Column<int>(type: "int", nullable: false),
                     IdEleccion = table.Column<int>(type: "int", nullable: true),
-                    IdUsuarioR = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -97,9 +94,7 @@ namespace Votacion.Migrations
                     Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmitioVotacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdEleccion1 = table.Column<int>(type: "int", nullable: false),
                     IdEleccion = table.Column<int>(type: "int", nullable: true),
-                    IdUsuarioR = table.Column<int>(type: "int", nullable: false),
                     IdUsuario = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -124,12 +119,9 @@ namespace Votacion.Migrations
                     IdVotacion = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEleccion1 = table.Column<int>(type: "int", nullable: false),
                     IdEleccion = table.Column<int>(type: "int", nullable: true),
-                    IdVotante = table.Column<int>(type: "int", nullable: false),
-                    IdUsuarioR = table.Column<int>(type: "int", nullable: false),
-                    IdUsuario = table.Column<int>(type: "int", nullable: true),
-                    IdCandidato = table.Column<int>(type: "int", nullable: false)
+                    IdVotante = table.Column<int>(type: "int", nullable: true),
+                    IdCandidato = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -138,24 +130,17 @@ namespace Votacion.Migrations
                         name: "FK_Votaciones_Candidatos_IdCandidato",
                         column: x => x.IdCandidato,
                         principalTable: "Candidatos",
-                        principalColumn: "IdCandidato",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IdCandidato");
                     table.ForeignKey(
                         name: "FK_Votaciones_Elecciones_IdEleccion",
                         column: x => x.IdEleccion,
                         principalTable: "Elecciones",
                         principalColumn: "IdEleccion");
                     table.ForeignKey(
-                        name: "FK_Votaciones_Usuarios_IdUsuario",
-                        column: x => x.IdUsuario,
-                        principalTable: "Usuarios",
-                        principalColumn: "IdUsuario");
-                    table.ForeignKey(
                         name: "FK_Votaciones_Votantes_IdVotante",
                         column: x => x.IdVotante,
                         principalTable: "Votantes",
-                        principalColumn: "IdVotante",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IdVotante");
                 });
 
             migrationBuilder.CreateIndex(
@@ -182,11 +167,6 @@ namespace Votacion.Migrations
                 name: "IX_Votaciones_IdEleccion",
                 table: "Votaciones",
                 column: "IdEleccion");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Votaciones_IdUsuario",
-                table: "Votaciones",
-                column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Votaciones_IdVotante",

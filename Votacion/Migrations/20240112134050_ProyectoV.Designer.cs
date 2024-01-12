@@ -12,8 +12,8 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240112044505_Proyecto1")]
-    partial class Proyecto1
+    [Migration("20240112134050_ProyectoV")]
+    partial class ProyectoV
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,13 +42,7 @@ namespace Votacion.Migrations
                     b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEleccion1")
-                        .HasColumnType("int");
-
                     b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioR")
                         .HasColumnType("int");
 
                     b.Property<string>("Mensaje")
@@ -95,9 +89,6 @@ namespace Votacion.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioR")
                         .HasColumnType("int");
 
                     b.HasKey("IdEleccion");
@@ -158,22 +149,13 @@ namespace Votacion.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdCandidato")
+                    b.Property<int?>("IdCandidato")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEleccion1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioR")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdVotante")
+                    b.Property<int?>("IdVotante")
                         .HasColumnType("int");
 
                     b.HasKey("IdVotacion");
@@ -181,8 +163,6 @@ namespace Votacion.Migrations
                     b.HasIndex("IdCandidato");
 
                     b.HasIndex("IdEleccion");
-
-                    b.HasIndex("IdUsuario");
 
                     b.HasIndex("IdVotante");
 
@@ -218,13 +198,7 @@ namespace Votacion.Migrations
                     b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEleccion1")
-                        .HasColumnType("int");
-
                     b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioR")
                         .HasColumnType("int");
 
                     b.Property<int>("IdUsuarioRegistro")
@@ -271,29 +245,19 @@ namespace Votacion.Migrations
                 {
                     b.HasOne("Votacion.Models.Entidades.Candidato", "Candidato")
                         .WithMany()
-                        .HasForeignKey("IdCandidato")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdCandidato");
 
                     b.HasOne("Votacion.Models.Entidades.Eleccion", "Eleccion")
                         .WithMany()
                         .HasForeignKey("IdEleccion");
 
-                    b.HasOne("Votacion.Models.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario");
-
                     b.HasOne("Votacion.Models.Entidades.Votante", "Votante")
                         .WithMany()
-                        .HasForeignKey("IdVotante")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdVotante");
 
                     b.Navigation("Candidato");
 
                     b.Navigation("Eleccion");
-
-                    b.Navigation("Usuario");
 
                     b.Navigation("Votante");
                 });
