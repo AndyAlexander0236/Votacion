@@ -1,0 +1,54 @@
+﻿@model Votacion.Models.Entidades.Usuario
+@{
+    ViewData["Title"] = "Crear";
+    Layout = null;
+}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <h5>Crear Usuario</h5>
+        </div>
+        <div class="card-body text-center">
+            <form asp-action="Crear">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label for="DocumentoIdentidad">Documento de Identidad</label>
+                    <input asp-for="DocumentoIdentidad" class="form-control" placeholder="Documento de Identidad" />
+                    <span asp-validation-for="DocumentoIdentidad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="NombreUsuario">Nombre</label>
+                    <input asp-for="NombreUsuario" class="form-control" placeholder="Nombre" />
+                    <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="ApellidoUsuario">Apellido</label>
+                    <input asp-for="ApellidoUsuario" class="form-control" placeholder="Apellido" />
+                    <span asp-validation-for="ApellidoUsuario" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Estado">Estado</label>
+                    <select asp-for="Activo" class="form-control">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                    <span asp-validation-for="Activo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="TipoUsuario">Tipo de Usuario</label>
+                    <select asp-for="TipoUsuario" class="form-control">
+                        <option value="Administrador">Administrador</option>
+                        <option value="Usuario">Usuario</option>
+                    </select>
+                    <span asp-validation-for="TipoUsuario" class="text-danger"></span>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
