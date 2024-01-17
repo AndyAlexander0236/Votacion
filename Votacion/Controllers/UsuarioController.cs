@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 using Votacion.Models;
 using Votacion.Models.Entidades;
 
@@ -9,7 +11,27 @@ namespace Votacion.Controllers
 	{
 		private readonly LibreriaContext _context;
 
-		public UsuarioController(LibreriaContext context)
+        private string EncriptarClave(string clave)
+        {
+
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // Convertir la cadena de la contraseña en un arreglo de bytes
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(clave));
+
+                // Convertir los bytes a una cadena hexadecimal
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
+        }
+
+
+        public UsuarioController(LibreriaContext context)
 		{
 			_context = context;
 		}
@@ -26,31 +48,32 @@ namespace Votacion.Controllers
 			return View();
 		}
 
-		[HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Crear(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                usuario.Activo = Request.Form["Activo"].Count > 0;
 
-		public async Task<IActionResult> Crear(Usuario usuario)
-		{
+                usuario.TipoUsuario = Request.Form["TipoUsuario"].FirstOrDefault();
 
-			if (ModelState.IsValid)
-			{
+                // Encriptar la contraseña antes de almacenarla
+                usuario.ClaveUsuario = EncriptarClave(usuario.ClaveUsuario);
+				
+                _context.Add(usuario);
+                await _context.SaveChangesAsync();
+                TempData["AlertMessage"] = "Usuario creado exitosamente";
+                return RedirectToAction("ListadoUsuario");
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Ha ocurrido un error");
+            }
 
-				_context.Add(usuario);
-				await _context.SaveChangesAsync();
-				TempData["Alert Message"] = "Usuario Creado exitosamente";
-				return RedirectToAction("ListadoUsuario");
+            return View();
+        }
 
-			}
-
-			else
-			{
-				ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
-			}
-
-			return View();
-
-		}
-
-		[HttpGet]
+        [HttpGet]
 		public async Task<IActionResult> Editar(int? id)
 		{
 			if (id == null || _context.Usuarios == null)
@@ -78,7 +101,13 @@ namespace Votacion.Controllers
 			{
 				try
 				{
-					_context.Update(usuario);
+                    usuario.Activo = Request.Form["Activo"].Count > 0;
+
+                    usuario.TipoUsuario = Request.Form["TipoUsuario"].FirstOrDefault();
+
+
+
+                    _context.Update(usuario);
 					await _context.SaveChangesAsync();
 					TempData["AlertMessage"] = "Usuario actualizado " +
 						"exitosamente!!!";
@@ -125,32 +154,7 @@ namespace Votacion.Controllers
 
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var usuario = await _context.Usuarios.FindAsync(id);
-
-			if (usuario == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				usuario.Activo = !usuario.Activo; // Cambiar el estado activo/desactivo
-				_context.Update(usuario);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado del Usuario {usuario.IdUsuario} " +
-					$"cambiado exitosamente a {(usuario.Activo ? "Activo" : "Inactivo")}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoUsuario));
-		}
-
+		
 
 
 

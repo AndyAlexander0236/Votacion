@@ -6,15 +6,13 @@
 
 @if (TempData["AlertMessage"] != null)
 {
-        <div class="alert alert-success">
-            <strong>!!</strong> @TempData["AlertMessage"]
-        </div>
+    <div class="alert alert-success">
+        <strong>!!</strong> @TempData["AlertMessage"]
+    </div>
 }
 
 <p>
-    <a onclick="showInPopup('@Url.Action("Crear", "Candidato",
-    new { id = 0 }, Context.Request.Scheme)' ,
-    '')" class="btn btn-sm btn-primary text-white">
+    <a onclick="showInPopup('@Url.Action("Crear", "Usuario", new { id = 0 })', 'Agregar un Usuario')" class="btn btn-sm btn-primary text-white">
         <i class="fa fa-plus-circle"></i> Agregar un Usuario
     </a>
 </p>
@@ -25,7 +23,7 @@
             <h5>Lista de Usuarios</h5>
         </div>
         <div class="card-body">
-            <table id="usuario" class="table table-hover table-responsive table-stripped">
+            <table id="Usuario" class="table table-hover table-responsive table-stripped">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -33,35 +31,36 @@
                         <th scope="col">Nombres</th>
                         <th scope="col">Apellidos</th>
                         <th scope="col">Correo</th>
+                        <th scope="col">Clave</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Tipo de Usuario</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                            <tr>
-                                <th scope="row">@item.IdUsuario</th>
-                                <td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
-                                <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
-                                <td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
-                                <td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Activo)</td>
+                        <tr>
+                            <th scope="row">@item.IdUsuario</th>
+                            <td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Activo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TipoUsuario)</td>
 
-                                <td>
-                                   <a onclick="showInPopup('@Url.Action("Editar", "Usuario",
-                                new { id = item.IdUsuario }, Context.Request.Scheme)' ,
-                                  'Actualizar Usuario')" class="btn btn-outline-warning btn-sm">
+
+
+                            <td>
+                                <a onclick="showInPopup('@Url.Action("Editar", "Usuario", new { id = item.IdUsuario })', 'Actualizar Usuario')" class="btn btn-outline-warning btn-sm">
                                     <i class="fa fa-pencil-alt"></i>
                                 </a>
-                                    <button data-id="@item.IdUsuario" 
-                                    class="btn btn-outline-danger btn-sm deleteItem" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteDialog">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                                <button data-id="@item.IdUsuario" class="btn btn-outline-danger btn-sm deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -73,20 +72,20 @@
 <partial name="_ModalEliminar" />
 
 @section Scripts {
-        <script src="~/js/showmodal.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="@Url.Content("~/js/showmodal.js")"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('#Usuario').DataTable({
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-                    },
-                });
+    <script>
+        $(document).ready(function () {
+            $('#Usuario').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                },
             });
-        </script>
+        });
+    </script>
 
-        <script>
-            sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
-        </script>
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
+    </script>
 }

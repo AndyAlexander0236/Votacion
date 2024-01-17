@@ -18,7 +18,11 @@ namespace Votacion.Models.Entidades
 
         [Column(TypeName = "decimal (18,2)")]
         [DisplayFormat(DataFormatString = "{0:c2}")]
+
+    
         public bool Activo { get; set; }
         public string TipoUsuario { get; set; }
+
+
     }
 }
