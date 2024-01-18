@@ -65,7 +65,6 @@ body {
         background: linear-gradient(to right, #d3d3d385, #6dd4fa75, #297fb983);
         position: absolute;
         top: 0;
-        left: 0;
     }
     .btn:hover::before {
         background: #a4b7; /*color transparente
