@@ -23,6 +23,6 @@ namespace Votacion.Models.Entidades
         public bool Activo { get; set; }
         public string TipoUsuario { get; set; }
 
-
+        //cambio
     }
 }
