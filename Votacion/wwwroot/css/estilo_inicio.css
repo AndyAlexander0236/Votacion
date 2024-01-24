@@ -1,6 +1,10 @@
-﻿body {
-    font-family: 'Roboto Slab', serif;
+﻿@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
 }
+
 
 /* HOVER NAVBAR */
 .nav-item a {
@@ -44,7 +48,7 @@ header {
 }
 
 h1 {
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .wave {

@@ -1,7 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
 }
-<link rel="stylesheet" href="/css/estilo_inicio.css"   />
+
+<link rel="stylesheet" href="/css/estilo_inicio.css/>
+
 	<!-- INICIO CUERPO PRINCIPAL-->
 	<section class="container-fluid" id="contiene">
 		<div class="row w-75 mx-auto servicio-fila my-5">
@@ -56,7 +59,7 @@
 					<div class="texto-span-2">
 						<h3 class="fs-3 mt-4 px-4 pb-1"><span>2</span>Paso</h3>
 						<p class="px-4 fs-5">
-							Registrarse por medio del apartado de <a href="registrarvista.html"
+							Registrarse por medio del apartado de <a href="Registro.cshtml"
 													   target="_blank" class="text-decoration-none"><strong>Registro</strong></a> con los
 							datos solicitados.
 						</p>
@@ -73,7 +76,7 @@
 		</div>
 	</section>
 	<section id="edadSeccion">
-		<h6>Recordá que debes ser mayor de 16 años, ingresa fecha de nacimiento</h6>
+		<h6>Recuerdá que debes ser mayor de 16 años, ingresa fecha de nacimiento</h6>
 		<div id="inputEdad">
 			<input onclick="habilita()" type="date" id="fechanacimiento" name="fecha_nacimiento"
 				   class="form-control" placeholder="Fecha de nacimiento" required />

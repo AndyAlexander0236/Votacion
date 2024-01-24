@@ -11,28 +11,30 @@ namespace Votacion.Services
         {
             _context = context;
         }
-        public async Task<Usuario> GetUsuario(string correo, string clave)
+        public async Task<Usuario> GetUsuario(string CorreoUsuario, string ClaveUsuario)
         {
-            Usuario usuario = await _context.Usuarios.Where(u => u.CorreoUsuario == correo && u.ClaveUsuario == clave).FirstOrDefaultAsync();
+            Usuario usuario = await _context.Usuarios.Where(u => u.CorreoUsuario == CorreoUsuario && u.ClaveUsuario == ClaveUsuario).FirstOrDefaultAsync();
 
             return usuario;
         }
-        public async Task<Usuario> GetUsuario(string nombre_usuario)
+        public async Task<Usuario> GetUsuario(string NombreUsuario)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == nombre_usuario);
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == NombreUsuario);
         }
-        public async Task<Usuario> GetUsuarioPorCorreo(string correo)
+        public async Task<Usuario> GetUsuarioPorCorreo(string Correo)
         {
-            Usuario usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.CorreoUsuario == correo);
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.CorreoUsuario == Correo);
 
             return usuario;
         }
-        public async Task<Usuario> SaveUsuario(Usuario usuario)
+       
+        public async Task<Usuario> SaveUsuario(Usuario Usuario)
         {
-            _context.Usuarios.Add(usuario);
+            _context.Usuarios.Add(Usuario);
             await _context.SaveChangesAsync();
-            return usuario;
+            return Usuario;
         }
+
+   
     }
 }

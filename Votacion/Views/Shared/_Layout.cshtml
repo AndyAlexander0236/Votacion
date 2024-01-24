@@ -8,7 +8,8 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Votacion.styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-	<link rel="stylesheet" href="css/estilo_inicio.css">
+	<link rel="stylesheet" href="/css/estilo_inicio.css">
+
 	@await RenderSectionAsync("Éstilos", required: false)
 
 
@@ -49,14 +50,33 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
 						</li>
 					</ul>
+
+					<div class="position-fixed top-0 end-0 p-3" style="z-index: 5; background-color: rgba(255, 255, 255, 0.8);">
+						<div style="text-align: right;">
+							<h5 class="display-4">Bienvenido @ViewData["nombreUsuario"]</h5>
+							<img src="@ViewData["fotoPerfil"]" alt="Foto de perfil" style="width: 200px; height: 200px; border-radius: 50%;" />
+							<form method="post" asp-controller="Login" asp-action="CerrarSesion" style="margin-top: 10px;">
+								<button type="submit" style="background-color: #52CCF3; color: #fff; font-size: 12px;
+                                 padding: 10px 45px; border: 1px solid transparent; border-radius: 8px; font-weight: 600;
+                                 letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;">
+									Cerrar Sesión
+								</button>
+							</form>
+						</div>
+					</div>
+
+
+
+
 				</div>
 			</div>
 		</nav>
+
 		<section class="w-60 mx-auto text-center" id="intro">
 			<h1 class="p-5 fs-1">CONTAMOS TU VOTO</h1>
 		</section>
 
-	
+
 		<!-- EFECTO IMAGEN PRINCIPAL-->
 		<div class="wave" style="height: 120px; overflow: hidden;">
 			<svg viewBox="0 0 500 150" preserveAspectRatio="none"

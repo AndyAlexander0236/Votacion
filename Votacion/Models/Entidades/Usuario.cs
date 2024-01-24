@@ -16,10 +16,6 @@ namespace Votacion.Models.Entidades
         public string CorreoUsuario { get; set; }
         public string ClaveUsuario { get; set; }
 
-        [Column(TypeName = "decimal (18,2)")]
-        [DisplayFormat(DataFormatString = "{0:c2}")]
-
-        [NotMapped]
         public string URLFotoPerfil { get; set; }
 
     }
