@@ -1,0 +1,102 @@
+﻿@model Votacion.Models.Entidades.Usuario
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="~/css/estilo_login.css"> 
+    <title>Iniciar Sesión</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-in">
+            <form asp-controller="Login" asp-action="IniciarSesion" method="post">
+                <h1>Iniciar Sesión</h1>
+               
+                <input class="form-control mb-3" type="email" placeholder="Correo" required name="correo" />
+                <input class="form-control mb-3" type="password" placeholder="Contraseña" required name="clave" />
+                <div class="d-grid gap-2 mb-3">
+                    <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
+                </div>
+                @if (ViewData["Mensaje"] != null)
+                {
+                    <div class="form-group">
+                        <div class="alert alert-danger" role="alert">
+                            @ViewData["Mensaje"]
+                        </div>
+                    </div>
+                }
+            </form>
+        </div>
+
+
+
+        <div class="container" id="container">
+            <div class="form-container sign-up">
+                <form asp-controller="Login" asp-action="Registro" method="post" enctype="multipart/form-data">
+                    <h1>Regístrate</h1>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="text" placeholder="Documento de identidad" asp-for="DocumentoIdentidad" required />
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="text" placeholder="Nombre" asp-for="NombreUsuario" required />
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="text" placeholder="Apellido" asp-for="ApellidoUsuario" required />
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="text" placeholder="Correo" required asp-for="CorreoUsuario" />
+                    </div>
+                    <div class="mb-3">
+                        <input class="form-control" type="password" placeholder="Contraseña" required asp-for="ClaveUsuario" />
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="Imagen">
+                    </div>
+                    <div class="d-grid gap-2 mb-3">
+                        <button class="btn btn-primary" type="submit">Regístrate</button>
+                    </div>
+                    @if (ViewData["Mensaje"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewData["Mensaje"]
+                        </div>
+                    }
+                </form>
+            </div>
+
+            <div class="toggle-container">
+                <div class="toggle">
+                    <div class="toggle-panel toggle-left">
+                        <h1>Bienvenido de nuevo!</h1>
+                        <img src="/img/logos/logotipo1_Mesa_de_trabajo1.png" class="img-fluid" alt="Logo">
+                        <p>Ingresa tus detalles personales para usar todas las funciones del sitio.</p>
+                        <button class="hidden" id="login">Iniciar Sesión</button>
+                    </div>
+                    <div class="toggle-panel toggle-right">
+                        <h1>Hola, amigo!</h1>
+                        <img src="/img/logos/logotipo1_Mesa_de_trabajo1.png" class="img-fluid" alt="Logo">
+                        <p>Regístrate con tus detalles personales para usar todas las funciones del sitio.</p>
+                        <button class="hidden" id="register">Regístrate</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="~/js/login.js"></script> 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

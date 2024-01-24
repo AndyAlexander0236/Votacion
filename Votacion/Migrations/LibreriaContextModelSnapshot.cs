@@ -50,10 +50,6 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RutaImagen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("IdCandidato");
 
                     b.HasIndex("IdEleccion");
@@ -103,9 +99,6 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"));
 
-                    b.Property<decimal>("Activo")
-                        .HasColumnType("decimal (18,2)");
-
                     b.Property<string>("ApellidoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -123,10 +116,6 @@ namespace Votacion.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreUsuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -174,9 +163,6 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVotante"));
 
-                    b.Property<decimal>("Activo")
-                        .HasColumnType("decimal (18,2)");
-
                     b.Property<string>("ApellidoVotante")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -185,20 +171,10 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmitioVotacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioRegistro")
                         .HasColumnType("int");
 
                     b.Property<string>("NombreVotante")

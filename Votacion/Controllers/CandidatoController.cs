@@ -161,18 +161,7 @@ namespace Votacion.Controllers
 				return NotFound();
 			}
 
-			try
-			{
-				candidato.RutaImagen = nuevaRutaImagen;
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Ruta de imagen del Candidato {candidato.NombreCandidato} " +
-					$"cambiada exitosamente a {candidato.RutaImagen}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la ruta de imagen del candidato");
-			}
+			
 
 			return RedirectToAction(nameof(ListadoCandidato));
 		}

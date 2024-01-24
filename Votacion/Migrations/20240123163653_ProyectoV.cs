@@ -21,9 +21,7 @@ namespace Votacion.Migrations
                     NombreUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApellidoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CorreoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClaveUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
-                    TipoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ClaveUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,7 +58,6 @@ namespace Votacion.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NombreCandidato = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RutaImagen = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdEleccion = table.Column<int>(type: "int", nullable: true),
@@ -90,10 +87,6 @@ namespace Votacion.Migrations
                     DocumentoIdentidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NombreVotante = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApellidoVotante = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUsuarioRegistro = table.Column<int>(type: "int", nullable: false),
-                    Activo = table.Column<decimal>(type: "decimal (18,2)", nullable: false),
-                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmitioVotacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdEleccion = table.Column<int>(type: "int", nullable: true),
                     IdUsuario = table.Column<int>(type: "int", nullable: true)
                 },

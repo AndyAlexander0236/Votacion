@@ -135,19 +135,7 @@ namespace Votacion.Controllers
 				return NotFound();
 			}
 
-			try
-			{
-				votante.Activo = !votante.Activo; // Cambiar el estado activo/desactivo
-				_context.Update(votante);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado del Votante {votante.NombreVotante} " +
-					$"cambiado exitosamente a {(votante.Activo ? "Activo" : "Inactivo")}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado del votante");
-			}
-
+			
 			return RedirectToAction(nameof(ListadoVotante));
 		}
 

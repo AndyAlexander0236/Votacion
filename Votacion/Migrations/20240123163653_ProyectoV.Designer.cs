@@ -12,7 +12,7 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240112134050_ProyectoV")]
+    [Migration("20240123163653_ProyectoV")]
     partial class ProyectoV
     {
         /// <inheritdoc />
@@ -50,10 +50,6 @@ namespace Votacion.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreCandidato")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RutaImagen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -106,9 +102,6 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"));
 
-                    b.Property<decimal>("Activo")
-                        .HasColumnType("decimal (18,2)");
-
                     b.Property<string>("ApellidoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -126,10 +119,6 @@ namespace Votacion.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreUsuario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -177,9 +166,6 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVotante"));
 
-                    b.Property<decimal>("Activo")
-                        .HasColumnType("decimal (18,2)");
-
                     b.Property<string>("ApellidoVotante")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -188,20 +174,10 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmitioVotacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioRegistro")
                         .HasColumnType("int");
 
                     b.Property<string>("NombreVotante")

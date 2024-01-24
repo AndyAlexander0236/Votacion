@@ -13,7 +13,6 @@ namespace Votacion.Models.Entidades
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string NombreCandidato { get; set; }
         public string Mensaje { get; set; }
-        public string RutaImagen { get; set; }
 
         [Column(TypeName = "decimal (18,2)")]
         [DisplayFormat(DataFormatString = "{0:c2}")]

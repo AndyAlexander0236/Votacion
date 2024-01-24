@@ -53,10 +53,7 @@ namespace Votacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                usuario.Activo = Request.Form["Activo"].Count > 0;
-
-                usuario.TipoUsuario = Request.Form["TipoUsuario"].FirstOrDefault();
-
+             
                 // Encriptar la contraseña antes de almacenarla
                 usuario.ClaveUsuario = EncriptarClave(usuario.ClaveUsuario);
 				
@@ -101,9 +98,7 @@ namespace Votacion.Controllers
 			{
 				try
 				{
-                    usuario.Activo = Request.Form["Activo"].Count > 0;
-
-                    usuario.TipoUsuario = Request.Form["TipoUsuario"].FirstOrDefault();
+                  
 
 
 
