@@ -8,11 +8,12 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header text-center">
-            <h5>Crear Usuario</h5>
+            <h5>Editar Votante</h5>
         </div>
         <div class="card-body text-center">
-            <form asp-action="Crear">
+            <form asp-action="Editar">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdVotante" />
                 <div class="form-group">
                     <label for="DocumentoIdentidad">Documento de Identidad</label>
                     <input asp-for="DocumentoIdentidad" class="form-control" placeholder="Documento de Identidad" />

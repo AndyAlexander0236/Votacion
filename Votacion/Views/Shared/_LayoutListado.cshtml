@@ -32,6 +32,7 @@
 
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
 						</li>
+
 						<li class="nav-item">
 							@if (!User.IsInRole("Usuario"))
 							{
@@ -48,8 +49,12 @@
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Votaciones" asp-action="ListadoVotaciones">Votaciones</a>
 						</li>
+
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
+							@if (!User.IsInRole("Usuario"))
+							{
+								<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
+							}
 						</li>
 					</ul>
 

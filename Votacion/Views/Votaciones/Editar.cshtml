@@ -9,11 +9,12 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header text-center">
-            <h5>Crear Candidato</h5>
+            <h5>Editar Votacion</h5>
         </div>
         <div class="card-body text-center">
-            <form asp-action="Crear">
+            <form asp-action="Editar">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdVotacion" />
                 <div class="form-group">
                     <label for="FechaRegistra">FechaRegistro</label>
                     <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" />

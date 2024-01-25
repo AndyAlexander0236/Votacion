@@ -73,61 +73,67 @@ namespace Votacion.Controllers
 
 			return View();
 		}
+		[HttpPost]
+		public async Task<IActionResult> IniciarSesion(string correo, string clave, string rol)
+		{
+			Usuario usuarioEncontrado = await _ServicioUsuario.GetUsuario(correo, Utilitarios.EncriptarClave(clave));
 
-        [HttpPost]
-        public async Task<IActionResult> IniciarSesion(string correo, string clave)
-        {
-            Usuario usuarioEncontrado = await _ServicioUsuario.GetUsuario(correo, Utilitarios.EncriptarClave(clave));
+			if (usuarioEncontrado == null)
+			{
+				ViewData["Mensaje"] = "Usuario no encontrado";
+				return View();
+			}
 
-            if (usuarioEncontrado == null)
-            {
-                ViewData["Mensaje"] = "Usuario no encontrado";
-                return View();
-            }
+			// Validar si el usuario tiene un rol válido (opcional, dependiendo de tus necesidades)
+			if (usuarioEncontrado.Rol != "Administrador" && usuarioEncontrado.Rol != "Usuario")
+			{
+				ViewData["Mensaje"] = "Usuario no permitido";
+				return View();
+			}
 
-            // Validar si el usuario tiene un rol válido
-            if (usuarioEncontrado.Rol != "Administrador" && usuarioEncontrado.Rol != "Usuario")
-            {
-                ViewData["Mensaje"] = "Usuario no permitido";
-                return View();
-            }
+			// Validar si el rol seleccionado en el formulario coincide con el rol del usuario
+			if (rol != usuarioEncontrado.Rol)
+			{
+				ViewData["Mensaje"] = "Este Tipo de ingreso no es válido para este usuario.";
+				return View();
+			}
 
-            List<Claim> claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, usuarioEncontrado.NombreUsuario),
-        new Claim("FotoPerfil", usuarioEncontrado.URLFotoPerfil),
-        new Claim(ClaimTypes.Role, usuarioEncontrado.Rol),
-    };
+			List<Claim> claims = new List<Claim>
+	{
+		new Claim(ClaimTypes.Name, usuarioEncontrado.NombreUsuario),
+		new Claim("FotoPerfil", usuarioEncontrado.URLFotoPerfil),
+		new Claim(ClaimTypes.Role, usuarioEncontrado.Rol),
+	};
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            AuthenticationProperties properties = new AuthenticationProperties
-            {
-                AllowRefresh = true,
-            };
+			ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+			AuthenticationProperties properties = new AuthenticationProperties
+			{
+				AllowRefresh = true,
+			};
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                properties
-            );
+			await HttpContext.SignInAsync(
+				CookieAuthenticationDefaults.AuthenticationScheme,
+				new ClaimsPrincipal(claimsIdentity),
+				properties
+			);
 
-            // Redirige al usuario según su rol
-            if (usuarioEncontrado.Rol == "Administrador")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else if (usuarioEncontrado.Rol == "Usuario")
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                // Agrega una redirección por defecto si el rol no es reconocido
-                return RedirectToAction("Index", "Home");
-            }
-        }
+			// Redirige al usuario según su rol
+			if (usuarioEncontrado.Rol == "Administrador")
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else if (usuarioEncontrado.Rol == "Usuario")
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				// Agrega una redirección por defecto si el rol no es reconocido
+				return RedirectToAction("Index", "Home");
+			}
+		}
 
-        public async Task<IActionResult> CerrarSesion()
+		public async Task<IActionResult> CerrarSesion()
 		{
 			await HttpContext.SignOutAsync();
 			return Redirect("IniciarSesion");

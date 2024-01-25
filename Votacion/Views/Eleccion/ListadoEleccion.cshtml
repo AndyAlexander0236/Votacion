@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "ListadoEleccion";
 }
-<link rel="stylesheet" href="/css/estilo_usuario.css">
+<link rel="stylesheet" href="/css/estilo_eleccion.css">
 
 @if (User.IsInRole("Administrador"))
 {
@@ -31,6 +31,7 @@
 							<th scope="col">Cargo</th>
 							<th scope="col">Estado</th>
 							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Usuario</th>
 							<th scope="col">Editar / Eliminar</th>
 						</tr>
 					</thead>
@@ -94,19 +95,7 @@ else if (User.IsInRole("Usuario"))
 								<td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
 								<td>@Html.DisplayFor(modelItem => item.Cargo)</td>
 								<td>@Html.DisplayFor(modelItem => item.Activo)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
-								<td>
-									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
-                                new { id = item.IdEleccion }, Context.Request.Scheme)' ,
-                                  'Actualizar Eleccion')" class="btn btn-outline-warning btn-sm">
-										<i class="fa fa-pencil-alt"></i>
-									</a>
-									<button data-id="@item.IdEleccion"
-											class="btn btn-outline-danger btn-sm deleteItem"
-											data-bs-toggle="modal" data-bs-target="#deleteDialog">
-										<i class="fa fa-trash"></i>
-									</button>
-								</td>
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>								
 							</tr>
 						}
 					</tbody>
@@ -132,7 +121,7 @@ else if (User.IsInRole("Usuario"))
 
 	<script>
 		$(document).ready(function () {
-			$('#Usuario').DataTable({
+			$('#Eleccion').DataTable({
 				"language": {
 					"url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
 				},
@@ -141,6 +130,6 @@ else if (User.IsInRole("Usuario"))
 	</script>
 
 	<script>
-		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
+		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Eleccion/Eliminar/', false);
 	</script>
 }

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "ListadoVotaciones";
 }
-<link rel="stylesheet" href="/css/estilo_usuario.css">
+<link rel="stylesheet" href="/css/estilo_votacion.css">
 
 @if (User.IsInRole("Administrador"))
 {
@@ -89,18 +89,6 @@ else if (User.IsInRole("Usuario"))
 								<th scope="row">@item.IdVotacion</th>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
 
-								<td>
-									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
-                                new { id = item.IdVotacion }, Context.Request.Scheme)' ,
-                                  'Actualizar Votacion')" class="btn btn-outline-warning btn-sm">
-										<i class="fa fa-pencil-alt"></i>
-									</a>
-									<button data-id="@item.IdVotacion"
-											class="btn btn-outline-danger btn-sm deleteItem"
-											data-bs-toggle="modal" data-bs-target="#deleteDialog">
-										<i class="fa fa-trash"></i>
-									</button>
-								</td>
 							</tr>
 						}
 					</tbody>
@@ -125,7 +113,7 @@ else if (User.IsInRole("Usuario"))
 
 	<script>
 		$(document).ready(function () {
-			$('#Usuario').DataTable({
+			$('#Votaciones').DataTable({
 				"language": {
 					"url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
 				},
@@ -134,6 +122,6 @@ else if (User.IsInRole("Usuario"))
 	</script>
 
 	<script>
-		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
+		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Votaciones/Eliminar/', false);
 	</script>
 }
