@@ -21,13 +21,23 @@
 			<form asp-controller="Login" asp-action="IniciarSesion" method="post">
 				<h1>Iniciar Sesión</h1>
 
-				<span>o usa tu correo electrónico</span>
 				<input class="form-control mb-3" type="email" placeholder="Correo" required name="correo" />
 				<input class="form-control mb-3" type="password" placeholder="Contraseña" required name="clave" />
-				<a href="#">¿Olvidaste tu contraseña?</a>
+				<br>
+				<div class="mb-3">
+					<label for="rol">Tipo de Ingreso:</label>
+					<select class="form-control" id="rol" name="rol" placeholder="Tipo de Ingreso" required style="background-color: #eee; border: none; margin: 8px 0; padding: 10px 15px; font-size: 13px; border-radius: 8px; width: 100%; outline: none;">
+						<option value="Usuario">Usuario</option>
+						<option value="Administrador">Administrador</option>
+					</select>
+				</div>
+
+
+				<br>
 				<div class="d-grid gap-2 mb-3">
 					<button class="btn btn-primary" type="submit">Iniciar Sesión</button>
 				</div>
+
 				@if (ViewData["Mensaje"] != null)
 				{
 					<div class="form-group">
@@ -38,7 +48,6 @@
 				}
 			</form>
 		</div>
-
 
 
 		<div class="container" id="container">
@@ -64,6 +73,8 @@
 					<div class="mb-3">
 						<input type="file" class="form-control" name="Imagen">
 					</div>
+					
+
 					<div class="d-grid gap-2 mb-3">
 						<button class="btn btn-primary" type="submit">Regístrate</button>
 					</div>

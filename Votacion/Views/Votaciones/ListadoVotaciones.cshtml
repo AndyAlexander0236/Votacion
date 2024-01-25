@@ -3,89 +3,137 @@
 @{
     ViewData["Title"] = "ListadoVotaciones";
 }
-<link rel="stylesheet" href="~/css/estilo_votacion.css">
+<link rel="stylesheet" href="/css/estilo_usuario.css">
 
-
-@if (TempData["AlertMessage"] != null)
+@if (User.IsInRole("Administrador"))
 {
-        <div class="alert alert-success">
-            <strong>Ok!!</strong> @TempData["AlertMessage"]
-        </div>
-}
+	<div class="alert alert-success">
+		<strong>Ok!!</strong> @TempData["AlertMessage"]
+	</div>
+	<p>Bienvenido Administrador: @ViewData["NombreUsuario"]</p>
+	<p>
+		<a onclick="showInPopup('@Url.Action("Crear", "Votaciones", new { id = 0 })', 'Agregar una Votacion')"
+		   class="btn btn-sm btn-primary text-white">
+			<i class="fa fa-plus-circle"></i> Agregar una Votacion
+		</a>
+	</p>
 
-<p>
-    <a onclick="showInPopup('@Url.Action("Crear", "Votaciones", new { id = 0 })', 'Agregar una Votacion')" 
-    class="btn btn-sm btn-primary text-white">
-        <i class="fa fa-plus-circle"></i> Agregar una Votacion
-    </a>
-</p>
-
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header text-center">
-            <h5>Votaciones</h5>
-        </div>
-        <div class="card-body">
-            <table id="Votaciones" class="table table-hover table-responsive table-stripped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Fecha de Registro</th>
-                        <th scope="col">Eleccion</th>
-                        <th scope="col">Votante</th>
-                        <th scope="col">Candidato</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                            <tr>
-                                <th scope="row">@item.IdVotacion</th>
-                                <td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>                         
-                                <td>@Html.DisplayFor(modelItem => item.Eleccion)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Votante)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Candidato)</td>
-                                <td>
-                                    <a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header text-center">
+				<h5>Votaciones</h5>
+			</div>
+			<div class="card-body">
+				<table id="Votaciones" class="table table-hover table-responsive table-stripped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Fecha de Registro</th>
+						
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th scope="row">@item.IdVotacion</th>
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+						
+								<td>
+									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
                                 new { id = item.IdVotacion }, Context.Request.Scheme)' ,
                                   'Actualizar Votacion')" class="btn btn-outline-warning btn-sm">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                    <button data-id="@item.IdVotacion" 
-                                    class="btn btn-outline-danger btn-sm deleteItem"
-                                    data-bs-toggle="modal" data-bs-target="#deleteDialog">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+										<i class="fa fa-pencil-alt"></i>
+									</a>
+									<button data-id="@item.IdVotacion"
+											class="btn btn-outline-danger btn-sm deleteItem"
+											data-bs-toggle="modal" data-bs-target="#deleteDialog">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+
+}
+else if (User.IsInRole("Usuario"))
+{
+	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
+
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header text-center">
+				<h5>Votaciones</h5>
+			</div>
+			<div class="card-body">
+				<table id="Votaciones" class="table table-hover table-responsive table-stripped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Fecha de Registro</th>
+
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th scope="row">@item.IdVotacion</th>
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+
+								<td>
+									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
+                                new { id = item.IdVotacion }, Context.Request.Scheme)' ,
+                                  'Actualizar Votacion')" class="btn btn-outline-warning btn-sm">
+										<i class="fa fa-pencil-alt"></i>
+									</a>
+									<button data-id="@item.IdVotacion"
+											class="btn btn-outline-danger btn-sm deleteItem"
+											data-bs-toggle="modal" data-bs-target="#deleteDialog">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+}
 
 <partial name="_MostrarModal" />
 <partial name="_ModalEliminar" />
+
 @{
-    Layout = "_LayoutListado";
+	Layout = "_LayoutListado";
+
 }
 @section Scripts {
-        <script src="~/js/showmodal.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+	<script src="@Url.Content("~/js/showmodal.js")"></script>
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('#Votaciones').DataTable({
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-                    },
-                });
-            });
-        </script>
+	<script>
+		$(document).ready(function () {
+			$('#Usuario').DataTable({
+				"language": {
+					"url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+				},
+			});
+		});
+	</script>
 
-        <script>
-            sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Votaciones/Eliminar/', false);
-        </script>
+	<script>
+		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
+	</script>
 }

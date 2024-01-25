@@ -94,6 +94,36 @@ namespace Votacion.Controllers
 			return View(votante);
 		}
 
+
+		//EDITAR FECHA DE REGISTRO
+		[HttpPost]
+		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+		{
+			var votante = await _context.Votantes.FindAsync(id);
+
+			if (votante == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				votante.FechaRegistro = nuevaFechaRegistro;
+				_context.Update(votante);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Fecha de registro del Votante {votante.NombreVotante} " +
+					$"cambiada exitosamente a: {votante.FechaRegistro}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro del candidato");
+			}
+
+			return RedirectToAction(nameof(ListadoVotante));
+		}
+
+
+		//APARTADO DE ELIMINAR
 		public async Task<IActionResult> Eliminar(int? id)
 		{
 			if (id == null || _context.Votantes == null)
@@ -124,48 +154,6 @@ namespace Votacion.Controllers
 			return RedirectToAction(nameof(ListadoVotante));
 
 		}
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var votante = await _context.Votantes.FindAsync(id);
-
-			if (votante == null)
-			{
-				return NotFound();
-			}
-
-			
-			return RedirectToAction(nameof(ListadoVotante));
-		}
-
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var votante = await _context.Votantes.FindAsync(id);
-
-			if (votante == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				votante.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(votante);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro del Votante {votante.NombreVotante} " +
-					$"cambiada exitosamente a: {votante.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoVotante));
-		}
-
 
 
 	}

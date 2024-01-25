@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - Votacion</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Votacion.styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
@@ -32,8 +33,12 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
+							@if (!User.IsInRole("Usuario"))
+							{
+								<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
+							}
 						</li>
+
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Candidato" asp-action="ListadoCandidato">Candidatos</a>
 						</li>
@@ -47,6 +52,7 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
 						</li>
 					</ul>
+
 				
 
 

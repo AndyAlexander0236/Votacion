@@ -1,93 +1,136 @@
 ﻿@model IEnumerable<Votacion.Models.Entidades.Usuario>
 
 @{
-    ViewData["Title"] = "ListadoUsuario";
-   
+	ViewData["Title"] = "ListadoUsuario";
 }
-	<link rel="stylesheet" href="~/css/estilo_usuario.css">
 
+<link rel="stylesheet" href="/css/estilo_usuario.css">
 
-@if (TempData["AlertMessage"] != null)
+@if (User.IsInRole("Administrador"))
 {
-    <div class="alert alert-success">
-        <strong>ok!!</strong> @TempData["AlertMessage"]
-    </div>
+	<div class="alert alert-success">
+		<strong>Ok!!</strong> @TempData["AlertMessage"]
+	</div>
+	<p>Bienvenido Administrador: @ViewData["NombreUsuario"]</p>
+	<p>
+		<a onclick="showInPopup('@Url.Action("Crear", "Usuario", new { id = 0 })', 'Agregar un Usuario')" class="btn btn-sm btn-primary text-white">
+			<i class="fa fa-plus-circle"></i> Agregar un Usuario
+		</a>
+	</p>
+
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header text-center">
+				<h5>Lista de Usuarios</h5>
+			</div>
+			<div class="card-body">
+				<table id="Usuario" class="table table-hover table-responsive table-stripped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Documento de Identificación</th>
+							<th scope="col">Nombres</th>
+							<th scope="col">Apellidos</th>
+							<th scope="col">Correo</th>
+							<th scope="col">Clave</th>
+							<th scope="col">Rol</th>
+							<th scope="col">Editar / Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th scope="row">@item.IdUsuario</th>
+								<td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
+								<td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.Rol)</td>
+
+								<td>
+									<a onclick="showInPopup('@Url.Action("Editar", "Usuario", new { id = item.IdUsuario })', 'Actualizar Usuario')" class="btn btn-outline-warning btn-sm">
+										<i class="fa fa-pencil-alt"></i>
+									</a>
+									<button data-id="@item.IdUsuario" class="btn btn-text btn-outline-danger btn-sm deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
 }
+else if (User.IsInRole("Usuario"))
+{
+	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
-<p>
-    <a onclick="showInPopup('@Url.Action("Crear", "Usuario", new { id = 0 })', 'Agregar un Usuario')" class="btn btn-sm btn-primary text-white">
-        <i class="fa fa-plus-circle "></i> Agregar un Usuario
-    </a>
-</p>
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header text-center">
+				<h5>Lista de Usuarios</h5>
+			</div>
+			<div class="card-body">
+				<table id="Usuario" class="table table-hover table-responsive table-stripped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Documento de Identificación</th>
+							<th scope="col">Nombres</th>
+							<th scope="col">Apellidos</th>
+							<th scope="col">Correo</th>
+							<th scope="col">Clave</th>
+							<th scope="col">Rol</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th scope="row">@item.IdUsuario</th>
+								<td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
+								<td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
+								<td>@Html.DisplayFor(modelItem => item.Rol)</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header text-center">
-            <h5>Lista de Usuarios</h5>
-        </div>
-        <div class="card-body ">
-            <table id="Usuario" class="table table-hover table-responsive table-stripped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Documento de Identificación</th>
-                        <th scope="col">Nombres</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Correo</th>
-                        <th scope="col">Clave</th>
-                        <th scope="col">Editar / Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <th scope="row">@item.IdUsuario</th>
-                            <td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
-                            <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
-                            <td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
-                         
-
-
-                            <td>
-                                <a onclick="showInPopup('@Url.Action("Editar", "Usuario", new { id = item.IdUsuario })', 'Actualizar Usuario')" class="btn btn-outline-warning btn-sm">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                <button data-id="@item.IdUsuario" class="btn btn-text btn-outline-danger btn-sm deleteItem" data-bs-toggle="modal" data-bs-target="#deleteDialog">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+}
 
 <partial name="_MostrarModal" />
 <partial name="_ModalEliminar" />
 
 @{
-    Layout = "_LayoutListado";
+	Layout = "_LayoutListado";
+
 }
 @section Scripts {
-    <script src="@Url.Content("~/js/showmodal.js")"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+	<script src="@Url.Content("~/js/showmodal.js")"></script>
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#Usuario').DataTable({
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-                },
-            });
-        });
-    </script>
+	<script>
+		$(document).ready(function () {
+			$('#Usuario').DataTable({
+				"language": {
+					"url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+				},
+			});
+		});
+	</script>
 
-    <script>
-        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
-    </script>
+	<script>
+		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Usuario/Eliminar/', false);
+	</script>
 }

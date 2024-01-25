@@ -93,6 +93,93 @@ namespace Votacion.Controllers
 			return View(candidato);
 		}
 
+
+		//EDITAR MENSAJE 
+		[HttpPost]
+		public async Task<IActionResult> CambiarMensaje(int id, string nuevoMensaje)
+		{
+			var candidato = await _context.Candidatos.FindAsync(id);
+
+			if (candidato == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				candidato.Mensaje = nuevoMensaje;
+				_context.Update(candidato);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Mensaje del Candidato {candidato.NombreCandidato} " +
+					$"cambiado exitosamente a: {candidato.Mensaje}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el mensaje del candidato");
+			}
+
+			return RedirectToAction(nameof(ListadoCandidato));
+		}
+
+
+		//EDITAR ESTADO ACTIVO/INACTIVO
+		[HttpPost]
+		public async Task<IActionResult> CambiarEstado(int id)
+		{
+			var candidato = await _context.Candidatos.FindAsync(id);
+
+			if (candidato == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				candidato.Activo = !candidato.Activo; // Cambiar el estado activo/desactivo
+				_context.Update(candidato);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Estado del Candidato {candidato.NombreCandidato} " +
+					$"cambiado exitosamente a {(candidato.Activo ? "Activo" : "Inactivo")}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado del candidato");
+			}
+
+			return RedirectToAction(nameof(ListadoCandidato));
+		}
+
+
+
+		//EDITAR FECHA DE REGISTRO
+		[HttpPost]
+		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+		{
+			var candidato = await _context.Candidatos.FindAsync(id);
+
+			if (candidato == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				candidato.FechaRegistro = nuevaFechaRegistro;
+				_context.Update(candidato);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Fecha de registro del Candidato {candidato.NombreCandidato} " +
+					$"cambiada exitosamente a: {candidato.FechaRegistro}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro del candidato");
+			}
+
+			return RedirectToAction(nameof(ListadoCandidato));
+		}
+
+
+		//APARTADO DE ELIMINAR
 		public async Task<IActionResult> Eliminar(int? id)
 		{
 			if (id == null || _context.Candidatos == null)
@@ -124,101 +211,7 @@ namespace Votacion.Controllers
 
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.Activo = !candidato.Activo; // Cambiar el estado activo/desactivo
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado del Candidato {candidato.NombreCandidato} " +
-					$"cambiado exitosamente a {(candidato.Activo ? "Activo" : "Inactivo")}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarRutaImagen(int id, string nuevaRutaImagen)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarMensaje(int id, string nuevoMensaje)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.Mensaje = nuevoMensaje;
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Mensaje del Candidato {candidato.NombreCandidato} " +
-					$"cambiado exitosamente a: {candidato.Mensaje}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el mensaje del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro del Candidato {candidato.NombreCandidato} " +
-					$"cambiada exitosamente a: {candidato.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
+		
 
 	}
 }

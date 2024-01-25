@@ -1,4 +1,13 @@
-﻿//Funciones para fecha:
+﻿
+//Funcion cerrar secion
+	function toggleLogoutButton() {
+        var logoutForm = document.getElementById('logoutForm');
+	logoutForm.style.display = (logoutForm.style.display === 'none' || logoutForm.style.display === '') ? 'block' : 'none';
+    }
+
+
+
+//Funciones para fecha:
 
 //Función que obtiene la fecha actual
 function fechaActual() {

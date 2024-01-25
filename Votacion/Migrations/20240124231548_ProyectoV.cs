@@ -22,7 +22,8 @@ namespace Votacion.Migrations
                     ApellidoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CorreoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClaveUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    URLFotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    URLFotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

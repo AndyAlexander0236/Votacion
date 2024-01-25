@@ -27,6 +27,18 @@ body {
     height: 100vh;
 }
 
+/* Estilos para el select personalizado */
+.styled-select {
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
 
 .container {
     background-color: #fff;
@@ -96,6 +108,7 @@ body {
         width: 100%;
         outline: none;
     }
+
 
 .form-container {
     position: absolute;

@@ -94,6 +94,64 @@ namespace Votacion.Controllers
 			return View(eleccion);
 		}
 
+		
+
+		//EDITAR ESTADO ACTIVO/INACTIVO
+		[HttpPost]
+		public async Task<IActionResult> CambiarEstado(int id)
+		{
+			var eleccion = await _context.Elecciones.FindAsync(id);
+
+			if (eleccion == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				eleccion.Activo = !eleccion.Activo; // Cambiar el estado activo/desactivo
+				_context.Update(eleccion);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Estado de la eleccion cambiado exitosamente a {(eleccion.Activo ? "Activo" : "Inactivo")}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado de la eleccion");
+			}
+
+			return RedirectToAction(nameof(ListadoEleccion));
+		}
+
+
+
+		//EDITAR FECHA DE REGISTRO
+		[HttpPost]
+		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+		{
+			var eleccion = await _context.Elecciones.FindAsync(id);
+
+			if (eleccion == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				eleccion.FechaRegistro = nuevaFechaRegistro;
+				_context.Update(eleccion);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
+			}
+
+			return RedirectToAction(nameof(ListadoEleccion));
+		}
+
+
+		//APARTADO DE ELIMINAR 
 		public async Task<IActionResult> Eliminar(int? id)
 		{
 			if (id == null || _context.Elecciones == null)
@@ -124,60 +182,6 @@ namespace Votacion.Controllers
 			return RedirectToAction(nameof(ListadoEleccion));
 
 		}
-
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var eleccion = await _context.Elecciones.FindAsync(id);
-
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				eleccion.Activo = !eleccion.Activo; // Cambiar el estado activo/desactivo
-				_context.Update(eleccion);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado de la eleccion cambiado exitosamente a {(eleccion.Activo ? "Activo" : "Inactivo")}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado de la eleccion");
-			}
-
-			return RedirectToAction(nameof(ListadoEleccion));
-		}
-
-
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var eleccion = await _context.Elecciones.FindAsync(id);
-
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				eleccion.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(eleccion);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
-			}
-
-			return RedirectToAction(nameof(ListadoEleccion));
-		}
-
-
 
 
 

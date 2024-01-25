@@ -94,6 +94,36 @@ namespace Votacion.Controllers
 			return View(votaciones);
 		}
 
+
+		//EDITAR FECHA DE REGISTRO
+		[HttpPost]
+		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+		{
+			var votaciones = await _context.Votaciones.FindAsync(id);
+
+			if (votaciones == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				votaciones.FechaRegistro = nuevaFechaRegistro;
+				_context.Update(votaciones);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {votaciones.FechaRegistro}.";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
+			}
+
+			return RedirectToAction(nameof(ListadoVotaciones));
+		}
+
+
+
+		//APARTADO DE ELIMINAR
 		public async Task<IActionResult> Eliminar(int? id)
 		{
 			if (id == null || _context.Usuarios == null)
@@ -126,32 +156,7 @@ namespace Votacion.Controllers
 		}
 
 
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var votaciones = await _context.Votaciones.FindAsync(id);
-
-			if (votaciones == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				votaciones.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(votaciones);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {votaciones.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
-			}
-
-			return RedirectToAction(nameof(ListadoVotaciones));
-		}
-
-
+		
 
 	}
 }

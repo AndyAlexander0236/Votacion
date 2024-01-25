@@ -12,7 +12,7 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240124164229_ProyectoV")]
+    [Migration("20240124231548_ProyectoV")]
     partial class ProyectoV
     {
         /// <inheritdoc />
@@ -119,6 +119,10 @@ namespace Votacion.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreUsuario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

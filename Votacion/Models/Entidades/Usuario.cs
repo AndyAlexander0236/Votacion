@@ -9,7 +9,9 @@ namespace Votacion.Models.Entidades
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdUsuario { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+		public string Rol { get; set; }
+
+		[Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string DocumentoIdentidad { get; set; }
         public string NombreUsuario { get; set; }
         public string ApellidoUsuario { get; set; }
@@ -18,5 +20,7 @@ namespace Votacion.Models.Entidades
 
         public string URLFotoPerfil { get; set; }
 
-    }
+		
+
+	}
 }

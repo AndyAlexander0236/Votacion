@@ -119,6 +119,10 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("URLFotoPerfil")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

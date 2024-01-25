@@ -97,11 +97,7 @@ namespace Votacion.Controllers
 			if (ModelState.IsValid)
 			{
 				try
-				{
-                  
-
-
-
+				{                 
                     _context.Update(usuario);
 					await _context.SaveChangesAsync();
 					TempData["AlertMessage"] = "Usuario actualizado " +

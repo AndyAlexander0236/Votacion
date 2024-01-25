@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Votacion.Models;
 using Votacion.Services;
+using Microsoft.AspNetCore.Identity;
+using Votacion.Models.Entidades;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Se encarga de utilizar la cadena de informacion para conectarse ala BDD y su ventaja es que puede conectarse con cualquier BDD
 builder.Services.AddDbContext<LibreriaContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -19,13 +21,12 @@ builder.Services.AddScoped<IServicioCandidato, ServicioCandidato>();
 builder.Services.AddScoped<IServicioImagen, ServicioImagen>();
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
 
-
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-             .AddCookie(options =>
-             {
-                 options.LoginPath = "/Login/IniciarSesion";
-                 options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-             });
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/IniciarSesion";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+    });
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -35,9 +36,8 @@ builder.Services.AddControllersWithViews(options =>
             NoStore = true,
             Location = ResponseCacheLocation.None,
         }
-       );
+    );
 });
-
 
 var app = builder.Build();
 
@@ -45,7 +45,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -54,8 +53,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",

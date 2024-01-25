@@ -31,7 +31,10 @@ namespace Votacion.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Registro(Usuario Usuario, IFormFile Imagen)
 
-		{  // Validar si no se ha seleccionado una imagen
+		{
+			Usuario.Rol = "Usuario";
+
+			// Validar si no se ha seleccionado una imagen
 			if (Imagen == null || Imagen.Length == 0)
 			{
 				ViewData["Mensaje"] = "Es necesario subir una foto.";
@@ -70,40 +73,61 @@ namespace Votacion.Controllers
 
 			return View();
 		}
-		[HttpPost]
-		public async Task<IActionResult> IniciarSesion(string correo, string clave)
-		{
-			Usuario usuarioEncontrado = await _ServicioUsuario.GetUsuario(correo, Utilitarios.EncriptarClave(clave));
 
-			if (usuarioEncontrado == null)
-			{
-				ViewData["Mensaje"] = "Usuario no encontrado";
-				return View();
-			}
+        [HttpPost]
+        public async Task<IActionResult> IniciarSesion(string correo, string clave)
+        {
+            Usuario usuarioEncontrado = await _ServicioUsuario.GetUsuario(correo, Utilitarios.EncriptarClave(clave));
 
-			List<Claim> claims = new List<Claim>()
-			{
-				new Claim(ClaimTypes.Name, usuarioEncontrado.NombreUsuario),
-				new Claim("FotoPerfil", usuarioEncontrado.URLFotoPerfil),
-			};
+            if (usuarioEncontrado == null)
+            {
+                ViewData["Mensaje"] = "Usuario no encontrado";
+                return View();
+            }
 
-			ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-			AuthenticationProperties properties = new AuthenticationProperties()
-			{
-				AllowRefresh = true,
-			};
+            // Validar si el usuario tiene un rol válido
+            if (usuarioEncontrado.Rol != "Administrador" && usuarioEncontrado.Rol != "Usuario")
+            {
+                ViewData["Mensaje"] = "Usuario no permitido";
+                return View();
+            }
 
-			await HttpContext.SignInAsync(
-				CookieAuthenticationDefaults.AuthenticationScheme,
-				new ClaimsPrincipal(claimsIdentity),
-				properties
-				);
+            List<Claim> claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, usuarioEncontrado.NombreUsuario),
+        new Claim("FotoPerfil", usuarioEncontrado.URLFotoPerfil),
+        new Claim(ClaimTypes.Role, usuarioEncontrado.Rol),
+    };
 
-			return RedirectToAction("Index", "Home");
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            AuthenticationProperties properties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+            };
 
-		}
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                properties
+            );
 
-		public async Task<IActionResult> CerrarSesion()
+            // Redirige al usuario según su rol
+            if (usuarioEncontrado.Rol == "Administrador")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else if (usuarioEncontrado.Rol == "Usuario")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // Agrega una redirección por defecto si el rol no es reconocido
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public async Task<IActionResult> CerrarSesion()
 		{
 			await HttpContext.SignOutAsync();
 			return Redirect("IniciarSesion");

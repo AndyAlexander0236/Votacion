@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - Votacion</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Votacion.styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
@@ -35,8 +36,12 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
+							@if (!User.IsInRole("Usuario"))
+							{
+								<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
+							}
 						</li>
+
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Candidato" asp-action="ListadoCandidato">Candidatos</a>
 						</li>
@@ -50,22 +55,24 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
 						</li>
 					</ul>
+					<!--Apartado de Foto de Perfil-->
+					<div class="user-info-container position-fixed top-0 end-0 p-2" style="z-index: 5;">
+						<div style="text-align: left;">
+							<h1 class="h4">Bienvenido @ViewData["nombreUsuario"]</h1>
+							<img id="profileImage"
+								 src="@ViewData["fotoPerfil"]"
+								 alt="Foto de perfil"
+								 style="width: 150px; height: 150px; border-radius: 50%; cursor: pointer;"
+								 onclick="document.getElementById('logoutForm').style.display = 'block';" />
 
-					<div class="position-fixed top-0 end-0 p-3" style="z-index: 5; background-color: rgba(255, 255, 255, 0.8);">
-						<div style="text-align: right;">
-							<h5 class="display-4">Bienvenido @ViewData["nombreUsuario"]</h5>
-							<img src="@ViewData["fotoPerfil"]" alt="Foto de perfil" style="width: 200px; height: 200px; border-radius: 50%;" />
-							<form method="post" asp-controller="Login" asp-action="CerrarSesion" style="margin-top: 10px;">
-								<button type="submit" style="background-color: #52CCF3; color: #fff; font-size: 12px;
-                                 padding: 10px 45px; border: 1px solid transparent; border-radius: 8px; font-weight: 600;
-                                 letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;">
+							<form id="logoutForm" method="post" asp-controller="Login" asp-action="CerrarSesion" style="margin-top: 5px; display: none;">
+								<button type="submit"
+										style="background-color: #52CCF3; color: #fff; font-size: 10px; padding: 5px 20px; border: 1px solid transparent; border-radius: 6px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer;">
 									Cerrar Sesión
 								</button>
 							</form>
 						</div>
 					</div>
-
-
 
 
 				</div>
