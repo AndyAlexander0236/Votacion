@@ -24,14 +24,14 @@
 				<h5>Lista de Candidatos</h5>
 			</div>
 			<div class="card-body">
-				<table id="candidato" class="table table-hover table-responsive table-stripped">
+				<table id="Candidato" class="table table-hover table-responsive table-stripped">
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<!--th de Imagen aprox-->
+							<th scope="col">Fotografia del Candidato</th>
 							<th scope="col">Nombre Completo</th>
+							<th scope="col">Apellido Completo</th>
 							<th scope="col">Mensaje</th>
-							<th scope="col">Estado</th>
 							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Editar / Eliminar</th>
 						</tr>
@@ -41,9 +41,12 @@
 						{
 							<tr>
 								<th scope="row">@item.IdCandidato</th>
+								<td>
+									<img src="@item.imgCandidato" alt="Imagen del Candidato" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+								</td>
 								<td>@Html.DisplayFor(modelItem => item.NombreCandidato)</td>
+								<td>@Html.DisplayFor(modelItem => item.ApellidoCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.Mensaje)</td>
-								<td>@Html.DisplayFor(modelItem => item.Activo)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Candidato", new { id = item.IdCandidato })', 'Actualizar Candidato')" class="btn btn-outline-warning btn-sm">
@@ -73,14 +76,14 @@ else if (User.IsInRole("Usuario"))
 				<h5>Lista de Candidatos</h5>
 			</div>
 			<div class="card-body">
-				<table id="candidato" class="table table-hover table-responsive table-stripped">
+				<table id="Candidato" class="table table-hover table-responsive table-stripped">
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<!--th de Imagen aprox-->
+							<th scope="col">Fotografia del Candidato</th>
 							<th scope="col">Nombre Completo</th>
+							<th scope="col">Apellido Completo</th>
 							<th scope="col">Mensaje</th>
-							<th scope="col">Estado</th>
 							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Editar / Eliminar</th>
 						</tr>
@@ -90,9 +93,12 @@ else if (User.IsInRole("Usuario"))
 						{
 							<tr>
 								<th scope="row">@item.IdCandidato</th>
+								<td>
+									<img src="@item.imgCandidato" alt="Imagen del Candidato" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+								</td>
 								<td>@Html.DisplayFor(modelItem => item.NombreCandidato)</td>
+								<td>@Html.DisplayFor(modelItem => item.ApellidoCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.Mensaje)</td>
-								<td>@Html.DisplayFor(modelItem => item.Activo)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>								
 							</tr>
 						}

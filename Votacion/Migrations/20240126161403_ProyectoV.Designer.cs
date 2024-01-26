@@ -12,7 +12,7 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240124231548_ProyectoV")]
+    [Migration("20240126161403_ProyectoV")]
     partial class ProyectoV
     {
         /// <inheritdoc />
@@ -33,16 +33,14 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCandidato"));
 
-                    b.Property<decimal>("Activo")
-                        .HasColumnType("decimal (18,2)");
+                    b.Property<string>("ApellidoCandidato")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("IdEleccion")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdUsuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Mensaje")
@@ -53,11 +51,13 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("imgCandidato")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCandidato");
 
                     b.HasIndex("IdEleccion");
-
-                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Candidatos");
                 });
@@ -84,12 +84,7 @@ namespace Votacion.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdUsuario")
-                        .HasColumnType("int");
-
                     b.HasKey("IdEleccion");
-
-                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Elecciones");
                 });
@@ -182,10 +177,10 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("IdEleccion")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdUsuario")
+                    b.Property<int?>("IdEleccion")
                         .HasColumnType("int");
 
                     b.Property<string>("NombreVotante")
@@ -196,8 +191,6 @@ namespace Votacion.Migrations
 
                     b.HasIndex("IdEleccion");
 
-                    b.HasIndex("IdUsuario");
-
                     b.ToTable("Votantes");
                 });
 
@@ -207,22 +200,7 @@ namespace Votacion.Migrations
                         .WithMany()
                         .HasForeignKey("IdEleccion");
 
-                    b.HasOne("Votacion.Models.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario");
-
                     b.Navigation("Eleccion");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Votacion.Models.Entidades.Eleccion", b =>
-                {
-                    b.HasOne("Votacion.Models.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Votacion.Models.Entidades.Votaciones", b =>
@@ -252,13 +230,7 @@ namespace Votacion.Migrations
                         .WithMany()
                         .HasForeignKey("IdEleccion");
 
-                    b.HasOne("Votacion.Models.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario");
-
                     b.Navigation("Eleccion");
-
-                    b.Navigation("Usuario");
                 });
 #pragma warning restore 612, 618
         }

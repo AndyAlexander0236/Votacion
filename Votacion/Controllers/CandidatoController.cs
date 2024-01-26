@@ -2,16 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Votacion.Models;
 using Votacion.Models.Entidades;
+using Votacion.Services;
 
 namespace Votacion.Controllers
 {
     public class CandidatoController : Controller
     {
+        private readonly IServicioImagen _ServicioImagen;
+
         private readonly LibreriaContext _context;
 
-        public CandidatoController(LibreriaContext context)
+        public CandidatoController(IServicioImagen ServicioImagen, LibreriaContext context)
         {
-            _context = context;
+			_ServicioImagen = ServicioImagen;
+		   _context = context;
         }
 
 		public async Task<IActionResult> ListadoCandidato()
@@ -27,11 +31,24 @@ namespace Votacion.Controllers
 
 		[HttpPost]
 
-		public async Task<IActionResult> Crear(Candidato candidato)
+		public async Task<IActionResult> Crear(Candidato candidato, IFormFile Imagen)
 		{
+
+			// Validar si no se ha seleccionado una imagen
+			if (Imagen == null || Imagen.Length == 0)
+			{
+				ViewData["Mensaje"] = "Es necesario subir una foto.";
+				return View();
+			}
+
 
 			if (ModelState.IsValid)
 			{
+
+				Stream image = Imagen.OpenReadStream();
+				string urlImagen = await _ServicioImagen.SubirImagen(image, Imagen.FileName);
+				candidato.imgCandidato = urlImagen;
+
 
 				_context.Add(candidato);
 				await _context.SaveChangesAsync();
@@ -122,34 +139,7 @@ namespace Votacion.Controllers
 		}
 
 
-		//EDITAR ESTADO ACTIVO/INACTIVO
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.Activo = !candidato.Activo; // Cambiar el estado activo/desactivo
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado del Candidato {candidato.NombreCandidato} " +
-					$"cambiado exitosamente a {(candidato.Activo ? "Activo" : "Inactivo")}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
-
+		
 
 		//EDITAR FECHA DE REGISTRO
 		[HttpPost]

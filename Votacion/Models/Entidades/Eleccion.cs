@@ -19,9 +19,6 @@ namespace Votacion.Models.Entidades
         public bool Activo { get; set; }
         public DateTime FechaRegistro { get; set; }
 
-        // Claves foráneas
-        //public int IdUsuarioR { get; set; }
-        [ForeignKey("IdUsuario")]
-        public virtual Usuario? Usuario { get; set; }
+       
     }
 }

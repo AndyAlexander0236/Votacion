@@ -13,7 +13,9 @@
         </div>
         <div class="card-body text-center">
             <form asp-action="Crear">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>        
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdVotacion" />
+
                 <div class="form-group">
                     <label for="FechaRegistra">FechaRegistro</label>
                     <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" />

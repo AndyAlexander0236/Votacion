@@ -14,24 +14,35 @@
             <form asp-action="Editar">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdCandidato" />
+
+
+                <div class="form-group">
+                    <label for="imgCandidato" class="control-label">Imagen del Candidato</label>
+                    <input asp-for="imgCandidato" type="file" name="imgCandidato" />
+                    <span asp-validation-for="imgCandidato" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="imgCandidato" class="control-label"></label>
+                    <input asp-for="imgCandidato" type="file" name="imgCandidato" />
+                    <span asp-validation-for="imgCandidato" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label for="NombreCandidato">Nombre</label>
                     <input asp-for="NombreCandidato" class="form-control" placeholder="Nombre" />
                     <span asp-validation-for="NombreCandidato" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label for="ApellidoCandidato">Apellido</label>
+                    <input asp-for="ApellidoCandidato" class="form-control" placeholder="Apellido" />
+                    <span asp-validation-for="ApellidoCandidato" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label for="Mensaje">Mensaje</label>
                     <input asp-for="Mensaje" class="form-control" placeholder="Mensaje" />
                     <span asp-validation-for="Mensaje" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label for="Activo">Estado</label>
-                    <select asp-for="Activo" class="form-control">
-                        <option value="true">Activo</option>
-                        <option value="false">Inactivo</option>
-                    </select>
-                    <span asp-validation-for="Activo" class="text-danger"></span>
-                </div>
+              
 
                 <div class="form-group">
                     <label for="FechaRegistra">FechaRegistro</label>

@@ -15,10 +15,6 @@ namespace Votacion.Models.Entidades
         public string NombreVotante { get; set; }
         public string ApellidoVotante { get; set; }
 
-        [Column(TypeName = "decimal (18,2)")]
-        [DisplayFormat(DataFormatString = "{0:c2}")]
-
-        [NotMapped]
         public DateTime FechaRegistro { get; set; }
 
         // Claves foráneas
@@ -26,8 +22,5 @@ namespace Votacion.Models.Entidades
         [ForeignKey("IdEleccion")]
         public virtual Eleccion? Eleccion { get; set; }
 
-        //public int IdUsuarioR { get; set; }
-        [ForeignKey("IdUsuario")]
-        public virtual Usuario? Usuario { get; set; }
     }
 }

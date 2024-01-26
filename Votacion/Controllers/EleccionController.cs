@@ -94,7 +94,7 @@ namespace Votacion.Controllers
 			return View(eleccion);
 		}
 
-		
+
 
 		//EDITAR ESTADO ACTIVO/INACTIVO
 		[HttpPost]
@@ -109,7 +109,8 @@ namespace Votacion.Controllers
 
 			try
 			{
-				eleccion.Activo = !eleccion.Activo; // Cambiar el estado activo/desactivo
+				// Cambiar el estado activo/desactivo
+				eleccion.Activo = !eleccion.Activo;
 				_context.Update(eleccion);
 				await _context.SaveChangesAsync();
 				TempData["AlertMessage"] = $"Estado de la eleccion cambiado exitosamente a {(eleccion.Activo ? "Activo" : "Inactivo")}.";
@@ -121,7 +122,6 @@ namespace Votacion.Controllers
 
 			return RedirectToAction(nameof(ListadoEleccion));
 		}
-
 
 
 		//EDITAR FECHA DE REGISTRO
@@ -137,10 +137,18 @@ namespace Votacion.Controllers
 
 			try
 			{
-				eleccion.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(eleccion);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
+				// Asegúrate de que nuevaFechaRegistro es válida
+				if (ModelState.IsValid)
+				{
+					eleccion.FechaRegistro = nuevaFechaRegistro;
+					_context.Update(eleccion);
+					await _context.SaveChangesAsync();
+					TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
+				}
+				else
+				{
+					ModelState.AddModelError("FechaRegistro", "La fecha proporcionada no es válida.");
+				}
 			}
 			catch (Exception ex)
 			{

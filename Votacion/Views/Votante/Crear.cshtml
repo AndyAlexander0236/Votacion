@@ -13,6 +13,8 @@
         <div class="card-body text-center">
             <form asp-action="Crear">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdVotante" />
+
                 <div class="form-group">
                     <label for="DocumentoIdentidad">Documento de Identidad</label>
                     <input asp-for="DocumentoIdentidad" class="form-control" placeholder="Documento de Identidad" />

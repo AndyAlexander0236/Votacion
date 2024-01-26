@@ -10,13 +10,19 @@ namespace Votacion.Models.Entidades
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdCandidato { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public string NombreCandidato { get; set; }
-        public string Mensaje { get; set; }
 
-        [Column(TypeName = "decimal (18,2)")]
-        [DisplayFormat(DataFormatString = "{0:c2}")]
-        public bool Activo { get; set; }
+		[Required(ErrorMessage = "El campo {0} es obligatorio")]
+
+        public string imgCandidato { get; set; }
+
+
+        public string NombreCandidato { get; set; }
+
+		public string ApellidoCandidato { get; set; }
+	
+
+		public string Mensaje { get; set; }
+
         public DateTime FechaRegistro { get; set; }
 
         // Claves foráneas
@@ -24,8 +30,6 @@ namespace Votacion.Models.Entidades
         [ForeignKey("IdEleccion")]
         public virtual Eleccion? Eleccion { get; set; }
 
-       // public int IdUsuarioR { get; set; }
-        [ForeignKey("IdUsuario")]
-        public virtual Usuario? Usuario { get; set; }
+ 
     }
 }
