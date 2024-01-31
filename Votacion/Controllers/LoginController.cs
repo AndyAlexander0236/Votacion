@@ -49,9 +49,9 @@ namespace Votacion.Controllers
         [HttpPost]
         public async Task<IActionResult> Registro(Usuario Usuario, IFormFile Imagen, int IdRol)
         {
-
-            // Validar si no se ha seleccionado una imagen
-            if (Imagen == null || Imagen.Length == 0)
+           	
+			// Validar si no se ha seleccionado una imagen
+			if (Imagen == null || Imagen.Length == 0)
             {
                 ViewData["Mensaje"] = "Es necesario subir una foto.";
                 return View();
@@ -83,7 +83,11 @@ namespace Votacion.Controllers
                 Text = e.Rol
             }).ToList();
 
-            Usuario usuarioCreado = await _ServicioUsuario.SaveUsuario(Usuario);
+
+			//Siempre se registrara como un Usuario 
+			Usuario.IdRol = 2;
+
+			Usuario usuarioCreado = await _ServicioUsuario.SaveUsuario(Usuario);
 
             if (usuarioCreado.IdUsuario > 0)
             {

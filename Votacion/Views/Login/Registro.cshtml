@@ -69,23 +69,18 @@
 						<input class="form-control" type="text" placeholder="Correo" required asp-for="CorreoUsuario" required />
 					</div>
 					<div class="mb-3">
-						<input class="form-control" type="password" placeholder="Contraseña" required asp-for="ClaveUsuario" required/>
+						<input class="form-control" type="password" placeholder="Contraseña" required asp-for="ClaveUsuario" required />
 					</div>
 					<div class="mb-3">
 						<input type="file" class="form-control" name="Imagen">
 					</div>
-<div class="form-group">
-    <label for="IdRol">Roles</label>
-    @{
-        var rolesList = ViewData["Roles"] as List<SelectListItem> ?? new List<SelectListItem>();
-    }
-    <select asp-for="IdRol" class="form-control" asp-items='@(new SelectList(rolesList, "Value", "Text"))'></select>
-    <span asp-validation-for="IdRol" class="text-danger"></span>
-</div>
+
 					<div class="d-grid gap-2 mb-3">
 						<button class="btn btn-primary" type="submit">Regístrate</button>
 					</div>
-					@if (ViewData["Mensaje"] != null)
+
+					@* Mostrar mensaje de error *@
+					@if (!string.IsNullOrEmpty(ViewData["Mensaje"]?.ToString()))
 					{
 						<div class="alert alert-danger" role="alert">
 							@ViewData["Mensaje"]
@@ -93,6 +88,11 @@
 					}
 				</form>
 			</div>
+		</div>
+
+
+
+
 
 			<div class="toggle-container">
 				<div class="toggle">

@@ -10,7 +10,8 @@
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
 	</div>
-	<p>Bienvenido Administrador: @ViewData["NombreUsuario"]</p>
+	<p>Bienvenido Administrador: @ViewData["nombreUsuario"]</p>
+
 	<p>
 		<a onclick="showInPopup('@Url.Action("Crear", "Candidato", new { id = 0 })', 'Agregar un Candidato')" class="btn btn-sm btn-primary text-white">
 			<i class="fa fa-plus-circle"></i> Agregar un Candidato

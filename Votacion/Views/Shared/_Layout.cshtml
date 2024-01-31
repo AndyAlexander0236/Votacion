@@ -52,13 +52,10 @@
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Votaciones" asp-action="ListadoVotaciones">Votaciones</a>
 						</li>
-
-
 						<li class="nav-item">
-							@if (!User.IsInRole("2"))
-							{
+						
 								<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
-							}
+							
 						</li>
 
 					</ul>
