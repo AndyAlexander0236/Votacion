@@ -12,7 +12,7 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240126161403_ProyectoV")]
+    [Migration("20240130221618_ProyectoV")]
     partial class ProyectoV
     {
         /// <inheritdoc />
@@ -37,11 +37,18 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EleccionIdEleccion")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdEleccion")
+                    b.Property<int>("IdEleccion")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImgCandidato")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mensaje")
                         .IsRequired()
@@ -51,13 +58,9 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("imgCandidato")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("IdCandidato");
 
-                    b.HasIndex("IdEleccion");
+                    b.HasIndex("EleccionIdEleccion");
 
                     b.ToTable("Candidatos");
                 });
@@ -89,6 +92,23 @@ namespace Votacion.Migrations
                     b.ToTable("Elecciones");
                 });
 
+            modelBuilder.Entity("Votacion.Models.Entidades.Roles", b =>
+                {
+                    b.Property<int>("IdRol")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRol"));
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdRol");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Votacion.Models.Entidades.Usuario", b =>
                 {
                     b.Property<int>("IdUsuario")
@@ -113,19 +133,23 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdRol")
+                        .HasColumnType("int");
+
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Rol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("RolesIdRol")
+                        .HasColumnType("int");
 
                     b.Property<string>("URLFotoPerfil")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdUsuario");
+
+                    b.HasIndex("RolesIdRol");
 
                     b.ToTable("Usuarios");
                 });
@@ -138,25 +162,18 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVotacion"));
 
+                    b.Property<int>("CandidatoIdCandidato")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdCandidato")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEleccion")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdVotante")
+                    b.Property<int>("IdCandidato")
                         .HasColumnType("int");
 
                     b.HasKey("IdVotacion");
 
-                    b.HasIndex("IdCandidato");
-
-                    b.HasIndex("IdEleccion");
-
-                    b.HasIndex("IdVotante");
+                    b.HasIndex("CandidatoIdCandidato");
 
                     b.ToTable("Votaciones");
                 });
@@ -177,10 +194,13 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EleccionIdEleccion")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdEleccion")
+                    b.Property<int>("IdEleccion")
                         .HasColumnType("int");
 
                     b.Property<string>("NombreVotante")
@@ -189,7 +209,7 @@ namespace Votacion.Migrations
 
                     b.HasKey("IdVotante");
 
-                    b.HasIndex("IdEleccion");
+                    b.HasIndex("EleccionIdEleccion");
 
                     b.ToTable("Votantes");
                 });
@@ -198,37 +218,36 @@ namespace Votacion.Migrations
                 {
                     b.HasOne("Votacion.Models.Entidades.Eleccion", "Eleccion")
                         .WithMany()
-                        .HasForeignKey("IdEleccion");
+                        .HasForeignKey("EleccionIdEleccion");
 
                     b.Navigation("Eleccion");
+                });
+
+            modelBuilder.Entity("Votacion.Models.Entidades.Usuario", b =>
+                {
+                    b.HasOne("Votacion.Models.Entidades.Roles", "Roles")
+                        .WithMany()
+                        .HasForeignKey("RolesIdRol");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("Votacion.Models.Entidades.Votaciones", b =>
                 {
                     b.HasOne("Votacion.Models.Entidades.Candidato", "Candidato")
                         .WithMany()
-                        .HasForeignKey("IdCandidato");
-
-                    b.HasOne("Votacion.Models.Entidades.Eleccion", "Eleccion")
-                        .WithMany()
-                        .HasForeignKey("IdEleccion");
-
-                    b.HasOne("Votacion.Models.Entidades.Votante", "Votante")
-                        .WithMany()
-                        .HasForeignKey("IdVotante");
+                        .HasForeignKey("CandidatoIdCandidato")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Candidato");
-
-                    b.Navigation("Eleccion");
-
-                    b.Navigation("Votante");
                 });
 
             modelBuilder.Entity("Votacion.Models.Entidades.Votante", b =>
                 {
                     b.HasOne("Votacion.Models.Entidades.Eleccion", "Eleccion")
                         .WithMany()
-                        .HasForeignKey("IdEleccion");
+                        .HasForeignKey("EleccionIdEleccion");
 
                     b.Navigation("Eleccion");
                 });

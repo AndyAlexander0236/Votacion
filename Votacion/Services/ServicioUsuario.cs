@@ -11,9 +11,9 @@ namespace Votacion.Services
         {
             _context = context;
         }
-        public async Task<Usuario> GetUsuario(string CorreoUsuario, string ClaveUsuario)
+        public async Task<Usuario> GetUsuario(string CorreoUsuario, string ClaveUsuario, int Rol)
         {
-            Usuario usuario = await _context.Usuarios.Where(u => u.CorreoUsuario == CorreoUsuario && u.ClaveUsuario == ClaveUsuario).FirstOrDefaultAsync();
+            Usuario usuario = await _context.Usuarios.Where(u => u.CorreoUsuario == CorreoUsuario && u.ClaveUsuario == ClaveUsuario && u.IdRol == Rol).FirstOrDefaultAsync();
 
             return usuario;
         }

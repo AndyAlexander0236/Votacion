@@ -9,5 +9,8 @@ namespace Votacion.Services
 
         Task<IEnumerable<SelectListItem>>
             GetListaCandidato();
+
+        Task<IEnumerable<SelectListItem>>
+           GetListaRol();
     }
 }

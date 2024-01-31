@@ -37,7 +37,7 @@
 						</li>
 
 						<li class="nav-item">
-							@if (!User.IsInRole("Usuario"))
+							@if (!User.IsInRole("2"))
 							{
 								<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
 							}
@@ -55,7 +55,7 @@
 
 
 						<li class="nav-item">
-							@if (!User.IsInRole("Usuario"))
+							@if (!User.IsInRole("2"))
 							{
 								<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
 							}

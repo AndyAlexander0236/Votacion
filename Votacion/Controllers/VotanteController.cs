@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Votacion.Models;
 using Votacion.Models.Entidades;
@@ -20,37 +21,49 @@ namespace Votacion.Controllers
 			return View(await _context.Votantes.ToListAsync());
 		}
 
-		public IActionResult Crear()
-		{
+        public IActionResult Crear()
+        {
+            // Obtén la lista de elecciones desde tu base de datos o cualquier otra fuente de datos
+            var elecciones = _context.Elecciones
+                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+                .ToList();
 
-			return View();
-		}
+            // Inicializa la propiedad Elecciones en el modelo Votante
+            var votante = new Votante
+            {
+                Elecciones = elecciones
+            };
 
-		[HttpPost]
+            return View(votante);
+        }
 
-		public async Task<IActionResult> Crear(Votante votante)
-		{
 
-			if (ModelState.IsValid)
-			{
+        [HttpPost]
+        public async Task<IActionResult> Crear(Votante votante)
+        {
+            
+                try
+                {
+                    _context.Add(votante);
+                    await _context.SaveChangesAsync();
+                    TempData["AlertMessage"] = "Votante creado exitosamente";
+                    return RedirectToAction("ListadoVotante");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
+                }
+            
 
-				_context.Add(votante);
-				await _context.SaveChangesAsync();
-				TempData["Alert Message"] = "Votante Creado exitosamente";
-				return RedirectToAction("ListadoVotante");
+            // Recarga la lista de elecciones en caso de error de validación
+            votante.Elecciones = _context.Elecciones
+                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+                .ToList();
 
-			}
+            return View(votante);
+        }
 
-			else
-			{
-				ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
-			}
-
-			return View();
-
-		}
-
-		[HttpGet]
+        [HttpGet]
 		public async Task<IActionResult> Editar(int? id)
 		{
 			if (id == null || _context.Votantes == null)

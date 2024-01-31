@@ -97,22 +97,38 @@ namespace Votacion.Controllers
 			if (ModelState.IsValid)
 			{
 				try
-				{                 
-                    _context.Update(usuario);
+				{
+					// Obtener el usuario existente de la base de datos
+					var usuarioExistente = await _context.Usuarios.FindAsync(id);
+
+					if (usuarioExistente == null)
+					{
+						return NotFound();
+					}
+
+					// Actualizar propiedades del usuario existente
+					usuarioExistente.NombreUsuario = usuario.NombreUsuario;
+					usuarioExistente.CorreoUsuario = usuario.CorreoUsuario;
+                    usuarioExistente.ClaveUsuario = usuario.ClaveUsuario;
+                    usuarioExistente.Rol = usuario.Rol; // Actualizar el rol
+
+					_context.Update(usuarioExistente);
 					await _context.SaveChangesAsync();
+
 					TempData["AlertMessage"] = "Usuario actualizado " +
 						"exitosamente!!!";
 					return RedirectToAction("ListadoUsuario");
 				}
 				catch (Exception ex)
 				{
-
-					ModelState.AddModelError(ex.Message, "Ocurrio un error " +
+					ModelState.AddModelError(ex.Message, "Ocurrió un error " +
 						"al actualizar");
 				}
 			}
+
 			return View(usuario);
 		}
+
 
 		public async Task<IActionResult> Eliminar(int? id)
 		{

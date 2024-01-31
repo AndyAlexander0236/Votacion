@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="/css/estilo_usuario.css">
 
-@if (User.IsInRole("Administrador"))
+@if (User.IsInRole("1"))
 {
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
@@ -47,7 +47,7 @@
 								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
-								<td>@Html.DisplayFor(modelItem => item.Rol)</td>
+								<td>@Html.DisplayFor(modelItem => item.IdRol)</td>
 
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Usuario", new { id = item.IdUsuario })', 'Actualizar Usuario')" class="btn btn-outline-warning btn-sm">
@@ -66,7 +66,7 @@
 	</div>
 
 }
-else if (User.IsInRole("Usuario"))
+else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
@@ -98,7 +98,7 @@ else if (User.IsInRole("Usuario"))
 								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
-								<td>@Html.DisplayFor(modelItem => item.Rol)</td>
+								<td>@Html.DisplayFor(modelItem => item.IdRol)</td>
 							</tr>
 						}
 					</tbody>

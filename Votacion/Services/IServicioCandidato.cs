@@ -2,7 +2,7 @@
 
 namespace Votacion.Services
 {
-    public interface IServicioCandidato
+	public interface IServicioCandidato
     {
         Task<Candidato> GetCandidato(int IdCandidato, string NombreCandidato);
         Task<Candidato> SaveCandidato(Candidato candidato);

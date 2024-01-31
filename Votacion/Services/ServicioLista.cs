@@ -6,7 +6,7 @@ using Votacion.Models.Entidades;
 
 namespace Votacion.Services
 {
-    public class ServicioLista
+    public class ServicioLista : IServicioLista
     {
         private readonly LibreriaContext _context;
 
@@ -52,6 +52,28 @@ namespace Votacion.Services
             });
             return list;
         }
+
+
+        public async Task<IEnumerable<SelectListItem>> GetListaRol()
+        {
+            List<SelectListItem> list = await _context.Roles.Select(x => new SelectListItem
+            {
+                Text = x.Rol,
+                Value = $"{x.IdRol}"
+            })
+            .OrderBy(x => x.Text)
+            .ToListAsync();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Seleccione un Rol....]",
+                Value = "0"
+
+            });
+            return list;
+        }
+
+
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Votacion.Models;
 using Votacion.Models.Entidades;
@@ -6,7 +7,7 @@ using Votacion.Services;
 
 namespace Votacion.Controllers
 {
-    public class CandidatoController : Controller
+	public class CandidatoController : Controller
     {
         private readonly IServicioImagen _ServicioImagen;
 
@@ -26,66 +27,65 @@ namespace Votacion.Controllers
 		public IActionResult Crear()
 		{
 
-			return View();
-		}
+			var elecciones = _context.Elecciones
+		   .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+		   .ToList();
 
-		[HttpPost]
-
-		public async Task<IActionResult> Crear(Candidato candidato, IFormFile Imagen)
-		{
-
-			// Validar si no se ha seleccionado una imagen
-			if (Imagen == null || Imagen.Length == 0)
+			// Inicializa la propiedad Elecciones en el modelo Candidato
+			var candidato = new Candidato
 			{
-				ViewData["Mensaje"] = "Es necesario subir una foto.";
-				return View();
-			}
+				Elecciones = elecciones
+			};
 
-
-			if (ModelState.IsValid)
-			{
-
-				Stream image = Imagen.OpenReadStream();
-				string urlImagen = await _ServicioImagen.SubirImagen(image, Imagen.FileName);
-				candidato.imgCandidato = urlImagen;
-
-
-				_context.Add(candidato);
-				await _context.SaveChangesAsync();
-				TempData["Alert Message"] = "Candidato Creado exitosamente";
-				return RedirectToAction("ListadoCandidato");
-
-			}
-
-			else
-			{
-				ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
-			}
-
-			return View();
-
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> Editar(int? id)
-		{
-			if (id == null || _context.Candidatos == null)
-			{
-				return NotFound();
-			}
-
-			var candidato = await _context.Candidatos.FindAsync(id);
-			if (candidato == null)
-			{
-				return NotFound();
-			}
 			return View(candidato);
 		}
+        [HttpPost]
+        public async Task<IActionResult> Crear(Candidato candidato, IFormFile Imagen)
+        {
+            // Validar si no se ha seleccionado una imagen
+            if (Imagen == null || Imagen.Length == 0)
+            {
+                ViewData["Mensaje"] = "Es necesario subir una foto.";
+                return View();
+            }
 
-		[HttpPost]
-		public async Task<IActionResult> Editar(int id, Candidato candidato)
+            try
+            {
+                // Subir la imagen y obtener la URL
+                Stream image = Imagen.OpenReadStream();
+                string urlImagen = await _ServicioImagen.SubirImagen(image, Imagen.FileName);
+                candidato.ImgCandidato = urlImagen;
+
+                // Asignar la elección seleccionada al Candidato
+                candidato.Eleccion = await _context.Elecciones.FindAsync(candidato.IdEleccion);
+
+
+                // Agregar el candidato a la base de datos
+                _context.Add(candidato);
+                await _context.SaveChangesAsync();
+
+                TempData["AlertMessage"] = "Candidato creado exitosamente";
+                return RedirectToAction("ListadoCandidato");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
+            }
+
+            // Recargar la lista de elecciones en caso de error
+            candidato.Elecciones = _context.Elecciones
+                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+                .ToList();
+
+            return View(candidato);
+        }
+
+
+
+        [HttpPost]
+		public async Task<IActionResult> Editar(int id, Usuario usuario)
 		{
-			if (id != candidato.IdCandidato)
+			if (id != usuario.IdUsuario)
 			{
 				return NotFound();
 			}
@@ -94,20 +94,37 @@ namespace Votacion.Controllers
 			{
 				try
 				{
-					_context.Update(candidato);
+					var usuarioExistente = await _context.Usuarios.FindAsync(id);
+
+					if (usuarioExistente == null)
+					{
+						return NotFound();
+					}
+
+					// Actualizar propiedades del usuario existente
+					usuarioExistente.NombreUsuario = usuario.NombreUsuario;
+					usuarioExistente.CorreoUsuario = usuario.CorreoUsuario;
+					usuarioExistente.ClaveUsuario = EncriptarClave(usuario.ClaveUsuario); // Encriptar la nueva contraseña
+					usuarioExistente.Rol = usuario.Rol;
+
+					_context.Update(usuarioExistente);
 					await _context.SaveChangesAsync();
-					TempData["AlertMessage"] = "Candidato actualizado " +
-						"exitosamente!!!";
-					return RedirectToAction("ListadoCandidato");
+
+					TempData["AlertMessage"] = "Usuario actualizado exitosamente!!!";
+					return RedirectToAction("ListadoUsuario");
 				}
 				catch (Exception ex)
 				{
-
-					ModelState.AddModelError(ex.Message, "Ocurrio un error " +
-						"al actualizar");
+					ModelState.AddModelError(string.Empty, $"Ocurrió un error al actualizar: {ex.Message}");
 				}
 			}
-			return View(candidato);
+
+			return View(usuario);
+		}
+
+		private string EncriptarClave(string claveUsuario)
+		{
+			throw new NotImplementedException();
 		}
 
 

@@ -28,22 +28,16 @@ namespace Votacion.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Roles",
                 columns: table => new
                 {
-                    IdUsuario = table.Column<int>(type: "int", nullable: false)
+                    IdRol = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentoIdentidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NombreUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApellidoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorreoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClaveUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    URLFotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Rol = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.IdUsuario);
+                    table.PrimaryKey("PK_Roles", x => x.IdRol);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,19 +46,20 @@ namespace Votacion.Migrations
                 {
                     IdCandidato = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    imgCandidato = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImgCandidato = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NombreCandidato = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApellidoCandidato = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEleccion = table.Column<int>(type: "int", nullable: true)
+                    EleccionIdEleccion = table.Column<int>(type: "int", nullable: true),
+                    IdEleccion = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Candidatos", x => x.IdCandidato);
                     table.ForeignKey(
-                        name: "FK_Candidatos_Elecciones_IdEleccion",
-                        column: x => x.IdEleccion,
+                        name: "FK_Candidatos_Elecciones_EleccionIdEleccion",
+                        column: x => x.EleccionIdEleccion,
                         principalTable: "Elecciones",
                         principalColumn: "IdEleccion");
                 });
@@ -79,16 +74,42 @@ namespace Votacion.Migrations
                     NombreVotante = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApellidoVotante = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEleccion = table.Column<int>(type: "int", nullable: true)
+                    EleccionIdEleccion = table.Column<int>(type: "int", nullable: true),
+                    IdEleccion = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Votantes", x => x.IdVotante);
                     table.ForeignKey(
-                        name: "FK_Votantes_Elecciones_IdEleccion",
-                        column: x => x.IdEleccion,
+                        name: "FK_Votantes_Elecciones_EleccionIdEleccion",
+                        column: x => x.EleccionIdEleccion,
                         principalTable: "Elecciones",
                         principalColumn: "IdEleccion");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    IdUsuario = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocumentoIdentidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NombreUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApellidoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CorreoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClaveUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    URLFotoPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RolesIdRol = table.Column<int>(type: "int", nullable: true),
+                    IdRol = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.IdUsuario);
+                    table.ForeignKey(
+                        name: "FK_Usuarios_Roles_RolesIdRol",
+                        column: x => x.RolesIdRol,
+                        principalTable: "Roles",
+                        principalColumn: "IdRol");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,54 +119,39 @@ namespace Votacion.Migrations
                     IdVotacion = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEleccion = table.Column<int>(type: "int", nullable: true),
-                    IdVotante = table.Column<int>(type: "int", nullable: true),
-                    IdCandidato = table.Column<int>(type: "int", nullable: true)
+                    CandidatoIdCandidato = table.Column<int>(type: "int", nullable: false),
+                    IdCandidato = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Votaciones", x => x.IdVotacion);
                     table.ForeignKey(
-                        name: "FK_Votaciones_Candidatos_IdCandidato",
-                        column: x => x.IdCandidato,
+                        name: "FK_Votaciones_Candidatos_CandidatoIdCandidato",
+                        column: x => x.CandidatoIdCandidato,
                         principalTable: "Candidatos",
-                        principalColumn: "IdCandidato");
-                    table.ForeignKey(
-                        name: "FK_Votaciones_Elecciones_IdEleccion",
-                        column: x => x.IdEleccion,
-                        principalTable: "Elecciones",
-                        principalColumn: "IdEleccion");
-                    table.ForeignKey(
-                        name: "FK_Votaciones_Votantes_IdVotante",
-                        column: x => x.IdVotante,
-                        principalTable: "Votantes",
-                        principalColumn: "IdVotante");
+                        principalColumn: "IdCandidato",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Candidatos_IdEleccion",
+                name: "IX_Candidatos_EleccionIdEleccion",
                 table: "Candidatos",
-                column: "IdEleccion");
+                column: "EleccionIdEleccion");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Votaciones_IdCandidato",
+                name: "IX_Usuarios_RolesIdRol",
+                table: "Usuarios",
+                column: "RolesIdRol");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votaciones_CandidatoIdCandidato",
                 table: "Votaciones",
-                column: "IdCandidato");
+                column: "CandidatoIdCandidato");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Votaciones_IdEleccion",
-                table: "Votaciones",
-                column: "IdEleccion");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Votaciones_IdVotante",
-                table: "Votaciones",
-                column: "IdVotante");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Votantes_IdEleccion",
+                name: "IX_Votantes_EleccionIdEleccion",
                 table: "Votantes",
-                column: "IdEleccion");
+                column: "EleccionIdEleccion");
         }
 
         /// <inheritdoc />
@@ -158,10 +164,13 @@ namespace Votacion.Migrations
                 name: "Votaciones");
 
             migrationBuilder.DropTable(
-                name: "Candidatos");
+                name: "Votantes");
 
             migrationBuilder.DropTable(
-                name: "Votantes");
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Candidatos");
 
             migrationBuilder.DropTable(
                 name: "Elecciones");

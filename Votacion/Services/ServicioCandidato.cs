@@ -4,7 +4,7 @@ using Votacion.Models.Entidades;
 
 namespace Votacion.Services
 {
-    public class ServicioCandidato : IServicioCandidato
+	public class ServicioCandidato : IServicioCandidato
     {
         private readonly LibreriaContext _context;
 

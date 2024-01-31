@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" href="/css/estilo_candidato.css">
 
-@if (User.IsInRole("Administrador"))
+@if (User.IsInRole("1"))
 {
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
@@ -33,6 +33,7 @@
 							<th scope="col">Apellido Completo</th>
 							<th scope="col">Mensaje</th>
 							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Tipo de Eleccion</th>
 							<th scope="col">Editar / Eliminar</th>
 						</tr>
 					</thead>
@@ -42,12 +43,15 @@
 							<tr>
 								<th scope="row">@item.IdCandidato</th>
 								<td>
-									<img src="@item.imgCandidato" alt="Imagen del Candidato" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+									<img src="@Html.DisplayFor(modelItem => item.ImgCandidato)" style="width: 200px; height: 200px;" />
 								</td>
 								<td>@Html.DisplayFor(modelItem => item.NombreCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.Mensaje)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
+
+
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Candidato", new { id = item.IdCandidato })', 'Actualizar Candidato')" class="btn btn-outline-warning btn-sm">
 										<i class="fa fa-pencil-alt"></i>
@@ -66,7 +70,7 @@
 
 
 }
-else if (User.IsInRole("Usuario"))
+else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
@@ -85,7 +89,8 @@ else if (User.IsInRole("Usuario"))
 							<th scope="col">Apellido Completo</th>
 							<th scope="col">Mensaje</th>
 							<th scope="col">Fecha de Registro</th>
-							<th scope="col">Editar / Eliminar</th>
+							<th scope="col">Tipo de Eleccion</th>
+
 						</tr>
 					</thead>
 					<tbody>
@@ -94,12 +99,14 @@ else if (User.IsInRole("Usuario"))
 							<tr>
 								<th scope="row">@item.IdCandidato</th>
 								<td>
-									<img src="@item.imgCandidato" alt="Imagen del Candidato" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+									<img src="@item.ImgCandidato" alt="Imagen del Candidato" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
 								</td>
 								<td>@Html.DisplayFor(modelItem => item.NombreCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoCandidato)</td>
 								<td>@Html.DisplayFor(modelItem => item.Mensaje)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>								
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
+
 							</tr>
 						}
 					</tbody>

@@ -5,7 +5,7 @@
 }
 <link rel="stylesheet" href="/css/estilo_votacion.css">
 
-@if (User.IsInRole("Administrador"))
+@if (User.IsInRole("1"))
 {
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
@@ -29,6 +29,8 @@
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Candidato </th>
+
 						
 							<th></th>
 						</tr>
@@ -39,6 +41,9 @@
 							<tr>
 								<th scope="row">@item.IdVotacion</th>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
+
+
 						
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
@@ -63,7 +68,7 @@
 
 
 }
-else if (User.IsInRole("Usuario"))
+else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
@@ -78,6 +83,8 @@ else if (User.IsInRole("Usuario"))
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Candidato </th>
+
 
 							<th></th>
 						</tr>
@@ -88,6 +95,8 @@ else if (User.IsInRole("Usuario"))
 							<tr>
 								<th scope="row">@item.IdVotacion</th>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
+
 
 							</tr>
 						}

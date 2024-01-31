@@ -20,6 +20,7 @@ namespace Votacion.Models
         public DbSet<Candidato> Candidatos { get; set; }
         public DbSet<Eleccion> Elecciones { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Roles> Roles { get; set; }
         public DbSet<Votaciones> Votaciones { get; set; }
         public DbSet<Votante> Votantes { get; set; }
 
@@ -34,4 +35,3 @@ namespace Votacion.Models
         }
     }
 }
-

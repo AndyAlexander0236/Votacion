@@ -20,6 +20,8 @@ builder.Services.AddDbContext<LibreriaContext>(o =>
 builder.Services.AddScoped<IServicioCandidato, ServicioCandidato>();
 builder.Services.AddScoped<IServicioImagen, ServicioImagen>();
 builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
+builder.Services.AddScoped<IServicioLista, ServicioLista>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

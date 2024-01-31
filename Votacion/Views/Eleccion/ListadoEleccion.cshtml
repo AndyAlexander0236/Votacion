@@ -5,7 +5,7 @@
 }
 <link rel="stylesheet" href="/css/estilo_eleccion.css">
 
-@if (User.IsInRole("Administrador"))
+@if (User.IsInRole("1"))
 {
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
@@ -65,7 +65,7 @@
 
 
 }
-else if (User.IsInRole("Usuario"))
+else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
@@ -93,7 +93,7 @@ else if (User.IsInRole("Usuario"))
 								<td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
 								<td>@Html.DisplayFor(modelItem => item.Cargo)</td>
 								<td>@Html.DisplayFor(modelItem => item.Activo)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>								
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>							
 							</tr>
 						}
 					</tbody>

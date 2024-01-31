@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Votacion.Models;
 using Votacion.Models.Entidades;
@@ -23,34 +24,40 @@ namespace Votacion.Controllers
 		public IActionResult Crear()
 		{
 
-			return View();
-		}
+            // Cargar la lista de candidatos con nombre y apellido combinados
+            ViewData["Candidatos"] = new SelectList(_context.Candidatos.Select(c => new
+            {
+                IdCandidato = c.IdCandidato,
+                NombreCompleto = $"{c.NombreCandidato} {c.ApellidoCandidato}"
+            }), "IdCandidato", "NombreCompleto");
 
-		[HttpPost]
+            return View();
+        }
 
-		public async Task<IActionResult> Crear(Votaciones votacion)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Crear(Votaciones votacion)
+        {
+            if (ModelState.IsValid)
+            {
+                // Aquí puedes usar votacion.IdCandidato para obtener el Id del candidato seleccionado
 
-			if (ModelState.IsValid)
-			{
+                // Resto del código para guardar la votación
+                _context.Add(votacion);
+                await _context.SaveChangesAsync();
 
-				_context.Add(votacion);
-				await _context.SaveChangesAsync();
-				TempData["Alert Message"] = "Votacion Creado exitosamente";
-				return RedirectToAction("ListadoVotaciones");
+                TempData["Alert Message"] = "Votacion Creado exitosamente";
+                return RedirectToAction("ListadoVotaciones");
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
+            }
 
-			}
+            return View();
+        }
 
-			else
-			{
-				ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
-			}
 
-			return View();
-
-		}
-
-		[HttpGet]
+        [HttpGet]
 		public async Task<IActionResult> Editar(int? id)
 		{
 			if (id == null || _context.Votaciones == null)

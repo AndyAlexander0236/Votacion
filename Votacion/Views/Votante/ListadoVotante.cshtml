@@ -1,12 +1,19 @@
 ﻿@model IEnumerable<Votacion.Models.Entidades.Votante>
 
 @{
-    ViewData["Title"] = "ListadoVotante";
+	ViewData["Title"] = "ListadoVotante";
 }
 <link rel="stylesheet" href="/css/estilo_votante.css">
 
-@if (User.IsInRole("Administrador"))
+@if (User.IsInRole("1"))
 {
+	@if (!string.IsNullOrEmpty(ViewBag.AlertMessage))
+	{
+		<div class="alert alert-success">
+			<strong>Éxito:</strong> @ViewBag.AlertMessage
+		</div>
+	}
+
 	<div class="alert alert-success">
 		<strong>Ok!!</strong> @TempData["AlertMessage"]
 	</div>
@@ -31,7 +38,8 @@
 							<th scope="col">Documento de Identidad</th>
 							<th scope="col">Nombre Completo</th>
 							<th scope="col">Apellido Completo</th>
-							<th scope="col">Fecha de Registro</th>				
+							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Tipo de Eleccion </th>
 							<th>Editar / Eliminar</th>
 						</tr>
 					</thead>
@@ -44,6 +52,8 @@
 								<td>@Html.DisplayFor(modelItem => item.NombreVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.IdEleccion)</td>
+
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Votante", new { id = item.IdVotante })', 'Actualizar Votante')"
 									   class="btn btn-outline-warning btn-sm">
@@ -62,7 +72,7 @@
 	</div>
 
 }
-else if (User.IsInRole("Usuario"))
+else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
@@ -80,7 +90,8 @@ else if (User.IsInRole("Usuario"))
 							<th scope="col">Nombre Completo</th>
 							<th scope="col">Apellido Completo</th>
 							<th scope="col">Fecha de Registro</th>
-							<th>Editar / Eliminar</th>
+							<th scope="col">Tipo de Eleccion </th>
+
 						</tr>
 					</thead>
 					<tbody>
@@ -91,7 +102,9 @@ else if (User.IsInRole("Usuario"))
 								<td>@Html.DisplayFor(modelItem => item.DocumentoIdentidad)</td>
 								<td>@Html.DisplayFor(modelItem => item.NombreVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoVotante)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>						
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@Html.DisplayFor(modelItem => item.IdEleccion)</td>
+
 							</tr>
 						}
 					</tbody>
@@ -99,8 +112,6 @@ else if (User.IsInRole("Usuario"))
 			</div>
 		</div>
 	</div>
-
-
 }
 
 <partial name="_MostrarModal" />
@@ -108,7 +119,6 @@ else if (User.IsInRole("Usuario"))
 
 @{
 	Layout = "_LayoutListado";
-
 }
 @section Scripts {
 	<script src="@Url.Content("~/js/showmodal.js")"></script>
