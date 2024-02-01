@@ -166,7 +166,8 @@ namespace Votacion.Controllers
                     // Subir la nueva imagen con el nuevo nombre único
                     Stream image = Imagen.OpenReadStream();
                     string urlImagen = await _ServicioImagen.SubirImagen(image,Imagen.FileName);
-                    usuarioExistente.URLFotoPerfil = urlImagen;
+					usuario.ClaveUsuario = Utilitarios.EncriptarClave(usuario.ClaveUsuario);
+					usuarioExistente.URLFotoPerfil = urlImagen;
 
                     // Actualizar los demás campos del libro
                     usuarioExistente.DocumentoIdentidad = usuario.DocumentoIdentidad;
