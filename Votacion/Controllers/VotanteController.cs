@@ -21,49 +21,33 @@ namespace Votacion.Controllers
 			return View(await _context.Votantes.ToListAsync());
 		}
 
-        public IActionResult Crear()
-        {
-            // Obtén la lista de elecciones desde tu base de datos o cualquier otra fuente de datos
-            var elecciones = _context.Elecciones
-                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
-                .ToList();
-
-            // Inicializa la propiedad Elecciones en el modelo Votante
-            var votante = new Votante
-            {
-                Elecciones = elecciones
-            };
-
-            return View(votante);
-        }
+		public IActionResult Crear()
+		{
+			return View();
+		}
 
 
-        [HttpPost]
-        public async Task<IActionResult> Crear(Votante votante)
-        {
-            
-                try
-                {
-                    _context.Add(votante);
-                    await _context.SaveChangesAsync();
-                    TempData["AlertMessage"] = "Votante creado exitosamente";
-                    return RedirectToAction("ListadoVotante");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
-                }
-            
 
-            // Recarga la lista de elecciones en caso de error de validación
-            votante.Elecciones = _context.Elecciones
-                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
-                .ToList();
+		[HttpPost]
+		public async Task<IActionResult> Crear(Votante votante)
+		{
 
-            return View(votante);
-        }
+			try
+			{
+				_context.Add(votante);
+				await _context.SaveChangesAsync();
+				TempData["AlertMessage"] = "Votante creado exitosamente";
+				return RedirectToAction("ListadoVotante");
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
+			}
 
-        [HttpGet]
+			return View(votante);
+		}
+
+		[HttpGet]
 		public async Task<IActionResult> Editar(int? id)
 		{
 			if (id == null || _context.Votantes == null)

@@ -1,197 +1,179 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// EleccionController.cs
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Votacion.Models;
 using Votacion.Models.Entidades;
 
-namespace Votacion.Controllers
+public class EleccionController : Controller
 {
-	public class EleccionController : Controller
+	private readonly LibreriaContext _context;
+
+	public EleccionController(LibreriaContext context)
 	{
-		private readonly LibreriaContext _context;
+		_context = context;
+	}
 
-		public EleccionController(LibreriaContext context)
+	public async Task<IActionResult> ListadoEleccion()
+	{
+		return View(await _context.Elecciones.ToListAsync());
+	}
+
+	public IActionResult Crear()
+	{
+		return View();
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Crear(Eleccion eleccion)
+	{
+		try
 		{
-			_context = context;
-		}
-
-
-		public async Task<IActionResult> ListadoEleccion()
-		{
-			return View(await _context.Elecciones.ToListAsync());
-		}
-
-		public IActionResult Crear()
-		{
-
-			return View();
-		}
-
-		[HttpPost]
-
-		public async Task<IActionResult> Crear(Eleccion eleccion)
-		{
-
 			if (ModelState.IsValid)
 			{
-
 				_context.Add(eleccion);
 				await _context.SaveChangesAsync();
-				TempData["Alert Message"] = "Eleccion Creado exitosamente";
-				return RedirectToAction("ListadoEleccion");
-
+				TempData["AlertMessage"] = "Eleccion creado exitosamente";
+				return RedirectToAction(nameof(ListadoEleccion));
 			}
-
-			else
-			{
-				ModelState.AddModelError(String.Empty, "Ha Ocurrido Un Error");
-			}
-
-			return View();
-
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Editar(int? id)
-		{
-			if (id == null || _context.Elecciones == null)
-			{
-				return NotFound();
-			}
+		return View(eleccion);
+	}
 
-			var eleccion = await _context.Elecciones.FindAsync(id);
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
-			return View(eleccion);
+	[HttpGet]
+	public async Task<IActionResult> Editar(int? id)
+	{
+		if (id == null)
+		{
+			return NotFound();
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Editar(int id, Eleccion eleccion)
-		{
-			if (id != eleccion.IdEleccion)
-			{
-				return NotFound();
-			}
+		var eleccion = await _context.Elecciones.FindAsync(id);
 
+		if (eleccion == null)
+		{
+			return NotFound();
+		}
+
+		return View(eleccion);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Editar(int id, Eleccion eleccion)
+	{
+		if (id != eleccion.IdEleccion)
+		{
+			return NotFound();
+		}
+
+		try
+		{
 			if (ModelState.IsValid)
 			{
-				try
-				{
-					_context.Update(eleccion);
-					await _context.SaveChangesAsync();
-					TempData["AlertMessage"] = "Eleccion actualizado " +
-						"exitosamente!!!";
-					return RedirectToAction("ListadoEleccion");
-				}
-				catch (Exception ex)
-				{
-
-					ModelState.AddModelError(ex.Message, "Ocurrio un error " +
-						"al actualizar");
-				}
-			}
-			return View(eleccion);
-		}
-
-
-
-		//EDITAR ESTADO ACTIVO/INACTIVO
-		[HttpPost]
-		public async Task<IActionResult> CambiarEstado(int id)
-		{
-			var eleccion = await _context.Elecciones.FindAsync(id);
-
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				// Cambiar el estado activo/desactivo
-				eleccion.Activo = !eleccion.Activo;
 				_context.Update(eleccion);
 				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Estado de la eleccion cambiado exitosamente a {(eleccion.Activo ? "Activo" : "Inactivo")}.";
+				TempData["AlertMessage"] = "Eleccion actualizado exitosamente";
+				return RedirectToAction(nameof(ListadoEleccion));
 			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el estado de la eleccion");
-			}
-
-			return RedirectToAction(nameof(ListadoEleccion));
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError(string.Empty, $"Ocurrió un error al actualizar: {ex.Message}");
 		}
 
+		return View(eleccion);
+	}
 
-		//EDITAR FECHA DE REGISTRO
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+	[HttpPost]
+	public async Task<IActionResult> CambiarEstado(int id)
+	{
+		var eleccion = await _context.Elecciones.FindAsync(id);
+
+		if (eleccion == null)
 		{
-			var eleccion = await _context.Elecciones.FindAsync(id);
-
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				// Asegúrate de que nuevaFechaRegistro es válida
-				if (ModelState.IsValid)
-				{
-					eleccion.FechaRegistro = nuevaFechaRegistro;
-					_context.Update(eleccion);
-					await _context.SaveChangesAsync();
-					TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
-				}
-				else
-				{
-					ModelState.AddModelError("FechaRegistro", "La fecha proporcionada no es válida.");
-				}
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
-			}
-
-			return RedirectToAction(nameof(ListadoEleccion));
+			return NotFound();
 		}
 
-
-		//APARTADO DE ELIMINAR 
-		public async Task<IActionResult> Eliminar(int? id)
+		try
 		{
-			if (id == null || _context.Elecciones == null)
-			{
-				return View();
-			}
+			eleccion.Activo = !eleccion.Activo;
+			_context.Update(eleccion);
+			await _context.SaveChangesAsync();
+			TempData["AlertMessage"] = $"Estado de la elección cambiado exitosamente a {(eleccion.Activo ? "Activo" : "Inactivo")}.";
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError(string.Empty, $"Ocurrió un error al cambiar el estado de la elección: {ex.Message}");
+		}
 
-			var eleccion = await _context.Elecciones
-				.FirstOrDefaultAsync(m => m.IdEleccion == id);
+		return RedirectToAction(nameof(ListadoEleccion));
+	}
 
-			if (eleccion == null)
-			{
-				return NotFound();
-			}
+	[HttpPost]
+	public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+	{
+		var eleccion = await _context.Elecciones.FindAsync(id);
 
-			try
+		if (eleccion == null)
+		{
+			return NotFound();
+		}
+
+		try
+		{
+			if (ModelState.IsValid)
 			{
-				_context.Elecciones.Remove(eleccion);
+				eleccion.FechaRegistro = nuevaFechaRegistro;
+				_context.Update(eleccion);
 				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = "Eleccion eliminado exitosamente!!";
+				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {eleccion.FechaRegistro}.";
 			}
-			catch (Exception ex)
+			else
 			{
-				ModelState.AddModelError(ex.Message, "Ocurrio un error, no se pudo eliminar el registro");
-
+				ModelState.AddModelError("FechaRegistro", "La fecha proporcionada no es válida.");
 			}
-
-			return RedirectToAction(nameof(ListadoEleccion));
-
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError(string.Empty, $"Ocurrió un error al cambiar la fecha de registro: {ex.Message}");
 		}
 
+		return RedirectToAction(nameof(ListadoEleccion));
+	}
 
+	public async Task<IActionResult> Eliminar(int? id)
+	{
+		if (id == null)
+		{
+			return NotFound();
+		}
 
+		var eleccion = await _context.Elecciones.FirstOrDefaultAsync(m => m.IdEleccion == id);
+
+		if (eleccion == null)
+		{
+			return NotFound();
+		}
+
+		try
+		{
+			_context.Elecciones.Remove(eleccion);
+			await _context.SaveChangesAsync();
+			TempData["AlertMessage"] = "Eleccion eliminado exitosamente";
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError(string.Empty, $"Ocurrió un error, no se pudo eliminar el registro: {ex.Message}");
+		}
+
+		return RedirectToAction(nameof(ListadoEleccion));
 	}
 }

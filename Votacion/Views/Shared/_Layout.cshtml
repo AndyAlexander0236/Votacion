@@ -50,13 +50,13 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Eleccion" asp-action="ListadoEleccion">Elecciones</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Votaciones" asp-action="ListadoVotaciones">Votaciones</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Votaciones" asp-action="ListadoVotaciones" onclick="mostrarModalVotarAqui(); return false;">Votaciones</a>
 						</li>
 						<li class="nav-item">
-						
-								<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
-							
+							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
 						</li>
+
+
 
 					</ul>
 					<!--Apartado de Foto de Perfil-->
@@ -126,11 +126,15 @@
 	</footer>
 
 
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="/js/funciones.js"></script>
+	<script src="/js/validacion.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+
+	
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 

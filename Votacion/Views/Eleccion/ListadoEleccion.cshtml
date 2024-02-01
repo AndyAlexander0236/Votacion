@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "ListadoEleccion";
 }
+
 <link rel="stylesheet" href="/css/estilo_eleccion.css">
 
 @if (User.IsInRole("1"))
@@ -93,7 +94,7 @@ else if (User.IsInRole("2"))
 								<td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
 								<td>@Html.DisplayFor(modelItem => item.Cargo)</td>
 								<td>@Html.DisplayFor(modelItem => item.Activo)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>							
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
 							</tr>
 						}
 					</tbody>

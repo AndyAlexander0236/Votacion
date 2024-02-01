@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Crear";
     Layout = null;
-
 }
 
 <div class="col-md-12">
@@ -12,15 +11,9 @@
             <h5>Crear Votacion</h5>
         </div>
         <div class="card-body text-center">
-            <form asp-action="Crear">
+            <form asp-action="Crear" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="IdVotacion" />
-
-                <div class="form-group">
-                    <label for="FechaRegistra">FechaRegistro</label>
-                    <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" />
-                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-                </div>
 
                 <div class="form-group">
                     <label for="IdCandidato">Candidato</label>
@@ -28,12 +21,22 @@
                     <span asp-validation-for="IdCandidato" class="text-danger"></span>
                 </div>
 
+                <div class="form-group">
+                    <label for="IdEleccion">Eleccion</label>
+                    <select asp-for="IdEleccion" class="form-control" asp-items="@((SelectList)ViewData["Elecciones"])"></select>
+                    <span asp-validation-for="IdEleccion" class="text-danger"></span>
+                </div>
 
+                <div class="form-group">
+                    <label for="FechaRegistro">Fecha de Registro</label>
+                    <input asp-for="FechaRegistro" class="form-control" placeholder="Fecha de Registro" />
+                    <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+                </div>
 
                 <div class="card-footer">
                     <div class="form-group">
                         <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                        <a class="btn btn-sm btn-primary" asp-action="ListadoVotaciones"><i class="fa fa-ban"></i> Cancelar</a>
                     </div>
                 </div>
             </form>

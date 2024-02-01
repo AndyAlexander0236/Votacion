@@ -12,11 +12,11 @@ namespace Votacion.Models.Entidades
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int IdCandidato { get; set; }
 
-		[Required(ErrorMessage = "El campo {0} es obligatorio")]
+        [Display(Name = "Imagen")]
+        public string ImgCandidato { get; set; }
 
-		[Display(Name = "Imagen")]
-		public string ImgCandidato { get; set; }
-		
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+	
 		public string NombreCandidato { get; set; }
 		public string ApellidoCandidato { get; set; }
 		public string Mensaje { get; set; }

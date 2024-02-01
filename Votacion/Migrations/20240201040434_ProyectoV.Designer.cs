@@ -12,7 +12,7 @@ using Votacion.Models;
 namespace Votacion.Migrations
 {
     [DbContext(typeof(LibreriaContext))]
-    [Migration("20240130221618_ProyectoV")]
+    [Migration("20240201040434_ProyectoV")]
     partial class ProyectoV
     {
         /// <inheritdoc />
@@ -162,7 +162,10 @@ namespace Votacion.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVotacion"));
 
-                    b.Property<int>("CandidatoIdCandidato")
+                    b.Property<int?>("CandidatoIdCandidato")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EleccionIdEleccion")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaRegistro")
@@ -171,9 +174,22 @@ namespace Votacion.Migrations
                     b.Property<int>("IdCandidato")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdEleccion")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdVotante")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VotanteIdVotante")
+                        .HasColumnType("int");
+
                     b.HasKey("IdVotacion");
 
                     b.HasIndex("CandidatoIdCandidato");
+
+                    b.HasIndex("EleccionIdEleccion");
+
+                    b.HasIndex("VotanteIdVotante");
 
                     b.ToTable("Votaciones");
                 });
@@ -194,22 +210,14 @@ namespace Votacion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EleccionIdEleccion")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IdEleccion")
-                        .HasColumnType("int");
 
                     b.Property<string>("NombreVotante")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdVotante");
-
-                    b.HasIndex("EleccionIdEleccion");
 
                     b.ToTable("Votantes");
                 });
@@ -236,20 +244,21 @@ namespace Votacion.Migrations
                 {
                     b.HasOne("Votacion.Models.Entidades.Candidato", "Candidato")
                         .WithMany()
-                        .HasForeignKey("CandidatoIdCandidato")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CandidatoIdCandidato");
 
-                    b.Navigation("Candidato");
-                });
-
-            modelBuilder.Entity("Votacion.Models.Entidades.Votante", b =>
-                {
                     b.HasOne("Votacion.Models.Entidades.Eleccion", "Eleccion")
                         .WithMany()
                         .HasForeignKey("EleccionIdEleccion");
 
+                    b.HasOne("Votacion.Models.Entidades.Votante", "Votante")
+                        .WithMany()
+                        .HasForeignKey("VotanteIdVotante");
+
+                    b.Navigation("Candidato");
+
                     b.Navigation("Eleccion");
+
+                    b.Navigation("Votante");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,7 +16,8 @@ namespace Votacion.Models.Entidades
         public string CorreoUsuario { get; set; }
         public string ClaveUsuario { get; set; }
         public string URLFotoPerfil { get; set; }
-        public Roles? Roles { get; set; }
+
+		public Roles? Roles { get; set; }
 
         // Clave foránea
         [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar un Rol.")]

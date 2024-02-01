@@ -7,16 +7,15 @@
 
 @if (User.IsInRole("1"))
 {
-	<div class="alert alert-success">
-		<strong>Ok!!</strong> @TempData["AlertMessage"]
-	</div>
-	<p>Bienvenido Administrador: @ViewData["NombreUsuario"]</p>
+	
 	<p>
 		<a onclick="showInPopup('@Url.Action("Crear", "Votaciones", new { id = 0 })', 'Agregar una Votacion')"
 		   class="btn btn-sm btn-primary text-white">
 			<i class="fa fa-plus-circle"></i> Agregar una Votacion
 		</a>
 	</p>
+
+
 
 	<div class="col-md-12">
 		<div class="card">
@@ -28,8 +27,12 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Candidato </th>
+							<th scope="col">Eleccion </th>
+							<th scope="col">Fecha de Registro</th>
+							<th scope="col">Editar  /  Eliminar</th>
+
+							
 
 						
 							<th></th>
@@ -40,8 +43,10 @@
 						{
 							<tr>
 								<th scope="row">@item.IdVotacion</th>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
 								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
+								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								
 
 
 						
@@ -72,6 +77,14 @@ else if (User.IsInRole("2"))
 {
 	<p>Bienvenido Usuario: @ViewData["NombreUsuario"]</p>
 
+	<!-- Agrega este botón para votar aquí -->
+	<p>
+		<a onclick="showInPopup('@Url.Action("Crear", "Votaciones", new { id = 0 })', 'Agregar una Votacion')"
+		   class="btn btn-sm btn-primary text-white">
+			<i class="fa fa-check-circle"></i> Votar Aquí
+		</a>
+	</p>
+
 	<div class="col-md-12">
 		<div class="card">
 			<div class="card-header text-center">
@@ -82,8 +95,9 @@ else if (User.IsInRole("2"))
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Candidato </th>
+							<th scope="col">Eleccion </th>
+							<th scope="col">Fecha de Registro</th>
 
 
 							<th></th>
@@ -94,8 +108,12 @@ else if (User.IsInRole("2"))
 						{
 							<tr>
 								<th scope="row">@item.IdVotacion</th>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
 								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
+								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
+								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+
+								
+
 
 
 							</tr>
@@ -105,6 +123,33 @@ else if (User.IsInRole("2"))
 			</div>
 		</div>
 	</div>
+
+
+
+	<!-- Modal para ingresar el documento de identidad y validar -->
+	<div class="modal fade" id="modalVotar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ingresar Documento de Identidad</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="documentoIdentidad" class="form-label">Documento de Identidad:</label>
+						<input type="text" class="form-control" id="documentoIdentidad" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" onclick="validarDocumento();">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="validarDocumento();">Votar</button>
+					<button type="button" class="btn btn-sm btn-primary" onclick="irAListadoVotantes()">Identificarse</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 
 }
@@ -133,4 +178,9 @@ else if (User.IsInRole("2"))
 	<script>
 		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Votaciones/Eliminar/', false);
 	</script>
+
+	<script src="/js/validacion.js"></script>
+
+
+
 }

@@ -21,24 +21,26 @@ namespace Votacion.Controllers
 
 		public async Task<IActionResult> ListadoCandidato()
 		{
-			return View(await _context.Candidatos.ToListAsync());
-		}
+            // Incluye la propiedad de navegación Eleccion al cargar los candidatos
+            var candidatos = await _context.Candidatos.Include(c => c.Eleccion).ToListAsync();
+
+            return View(candidatos);
+        }
 
 		public IActionResult Crear()
 		{
 
-			var elecciones = _context.Elecciones
-		   .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
-		   .ToList();
+            var elecciones = _context.Elecciones
+       .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+       .ToList();
 
-			// Inicializa la propiedad Elecciones en el modelo Candidato
-			var candidato = new Candidato
-			{
-				Elecciones = elecciones
-			};
+            var candidato = new Candidato
+            {
+                Elecciones = elecciones
+            };
 
-			return View(candidato);
-		}
+            return View(candidato);
+        }
         [HttpPost]
         public async Task<IActionResult> Crear(Candidato candidato, IFormFile Imagen)
         {
@@ -81,11 +83,34 @@ namespace Votacion.Controllers
         }
 
 
-
-        [HttpPost]
-		public async Task<IActionResult> Editar(int id, Usuario usuario)
+		[HttpGet]
+		public async Task<IActionResult> Editar(int? id)
 		{
-			if (id != usuario.IdUsuario)
+			if (id == null)
+			{
+				return NotFound(); // Devuelve 404 Not Found si el id no está especificado
+			}
+
+			var candidato = await _context.Candidatos
+				.Include(c => c.Eleccion) // Incluye la propiedad de navegación Eleccion
+				.FirstOrDefaultAsync(c => c.IdCandidato == id);
+
+			if (candidato == null)
+			{
+				return NotFound(); // Devuelve 404 Not Found si no se encuentra el candidato
+			}
+
+			// Cargar la lista de elecciones en ViewData para que esté disponible en la vista
+			ViewData["Elecciones"] = new SelectList(_context.Elecciones, "IdEleccion", "Descripcion", candidato.IdEleccion);
+
+			return View(candidato);
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> Editar(int id, Candidato candidato, IFormFile Imagen)
+		{
+			if (id != candidato.IdCandidato)
 			{
 				return NotFound();
 			}
@@ -94,24 +119,36 @@ namespace Votacion.Controllers
 			{
 				try
 				{
-					var usuarioExistente = await _context.Usuarios.FindAsync(id);
+					// Validar si no se ha seleccionado una nueva imagen
+					if (Imagen != null && Imagen.Length > 0)
+					{
+						// Subir la nueva imagen y obtener la URL
+						Stream image = Imagen.OpenReadStream();
+						string urlImagen = await _ServicioImagen.SubirImagen(image, Imagen.FileName);
+						candidato.ImgCandidato = urlImagen;
+					}
 
-					if (usuarioExistente == null)
+					// Obtener la elección seleccionada
+					candidato.Eleccion = await _context.Elecciones.FindAsync(candidato.IdEleccion);
+
+					// Actualizar propiedades del candidato existente
+					var candidatoExistente = await _context.Candidatos.FindAsync(id);
+					if (candidatoExistente == null)
 					{
 						return NotFound();
 					}
 
-					// Actualizar propiedades del usuario existente
-					usuarioExistente.NombreUsuario = usuario.NombreUsuario;
-					usuarioExistente.CorreoUsuario = usuario.CorreoUsuario;
-					usuarioExistente.ClaveUsuario = EncriptarClave(usuario.ClaveUsuario); // Encriptar la nueva contraseña
-					usuarioExistente.Rol = usuario.Rol;
+					candidatoExistente.NombreCandidato = candidato.NombreCandidato;
+					candidatoExistente.ApellidoCandidato = candidato.ApellidoCandidato;
+					candidatoExistente.Mensaje = candidato.Mensaje;
+					candidatoExistente.FechaRegistro = candidato.FechaRegistro;
+					candidatoExistente.Eleccion = candidato.Eleccion;
 
-					_context.Update(usuarioExistente);
+					_context.Update(candidatoExistente);
 					await _context.SaveChangesAsync();
 
-					TempData["AlertMessage"] = "Usuario actualizado exitosamente!!!";
-					return RedirectToAction("ListadoUsuario");
+					TempData["AlertMessage"] = "Candidato actualizado exitosamente!!!";
+					return RedirectToAction("ListadoCandidato");
 				}
 				catch (Exception ex)
 				{
@@ -119,70 +156,12 @@ namespace Votacion.Controllers
 				}
 			}
 
-			return View(usuario);
-		}
+			// Recargar la lista de elecciones en caso de error
+			candidato.Elecciones = _context.Elecciones
+				.Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+				.ToList();
 
-		private string EncriptarClave(string claveUsuario)
-		{
-			throw new NotImplementedException();
-		}
-
-
-		//EDITAR MENSAJE 
-		[HttpPost]
-		public async Task<IActionResult> CambiarMensaje(int id, string nuevoMensaje)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.Mensaje = nuevoMensaje;
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Mensaje del Candidato {candidato.NombreCandidato} " +
-					$"cambiado exitosamente a: {candidato.Mensaje}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar el mensaje del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
-		}
-
-
-		
-
-		//EDITAR FECHA DE REGISTRO
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var candidato = await _context.Candidatos.FindAsync(id);
-
-			if (candidato == null)
-			{
-				return NotFound();
-			}
-
-			try
-			{
-				candidato.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(candidato);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro del Candidato {candidato.NombreCandidato} " +
-					$"cambiada exitosamente a: {candidato.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro del candidato");
-			}
-
-			return RedirectToAction(nameof(ListadoCandidato));
+			return View(candidato);
 		}
 
 

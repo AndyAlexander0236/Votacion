@@ -18,13 +18,14 @@ namespace Votacion.Models.Entidades
 		public string ApellidoVotante { get; set; }
 
 		public DateTime FechaRegistro { get; set; }
-		public Eleccion? Eleccion { get; set; }
 
-		// Clave foránea
-		[Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una Eleccion.")]
-		public int IdEleccion { get; set; }
+		//public Eleccion? Eleccion { get; set; }
 
-		[NotMapped]
-		public IEnumerable<SelectListItem> Elecciones { get; set; }
+		////// Clave foránea
+		////[Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una Eleccion.")]
+		////public int IdEleccion { get; set; }
+
+		////[NotMapped]
+		////public IEnumerable<SelectListItem> Elecciones { get; set; }
 	}
 }

@@ -7,17 +7,14 @@
 
 @if (User.IsInRole("1"))
 {
-	@if (!string.IsNullOrEmpty(ViewBag.AlertMessage))
+	@if (string.IsNullOrEmpty(ViewBag.AlertMessage))
 	{
 		<div class="alert alert-success">
 			<strong>Éxito:</strong> @ViewBag.AlertMessage
 		</div>
 	}
 
-	<div class="alert alert-success">
-		<strong>Ok!!</strong> @TempData["AlertMessage"]
-	</div>
-	<p>Bienvenido Administrador: @ViewData["NombreUsuario"]</p>
+
 	<p>
 		<a onclick="showInPopup('@Url.Action("Crear", "Votante", new { id = 0 })', 'Agregar un Votante')
     " class="btn btn-sm btn-primary text-white">
@@ -39,7 +36,6 @@
 							<th scope="col">Nombre Completo</th>
 							<th scope="col">Apellido Completo</th>
 							<th scope="col">Fecha de Registro</th>
-							<th scope="col">Tipo de Eleccion </th>
 							<th>Editar / Eliminar</th>
 						</tr>
 					</thead>
@@ -52,8 +48,8 @@
 								<td>@Html.DisplayFor(modelItem => item.NombreVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
-								<td>@Html.DisplayFor(modelItem => item.IdEleccion)</td>
-
+@*								<td>@Html.DisplayFor(modelItem => item.IdEleccion)</td>
+*@
 								<td>
 									<a onclick="showInPopup('@Url.Action("Editar", "Votante", new { id = item.IdVotante })', 'Actualizar Votante')"
 									   class="btn btn-outline-warning btn-sm">
@@ -97,8 +93,7 @@ else if (User.IsInRole("2"))
                             <th scope="col">Nombre Completo</th>
                             <th scope="col">Apellido Completo</th>
                             <th scope="col">Fecha de Registro</th>
-                            <th scope="col">Tipo de Eleccion </th>
-                            <th scope="col">Observación</th>
+                            <th scope="col">     Observación</th>
 
 						</tr>
 					</thead>
@@ -111,10 +106,10 @@ else if (User.IsInRole("2"))
 								<td>@Html.DisplayFor(modelItem => item.NombreVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.ApellidoVotante)</td>
 								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
-								<td>@Html.DisplayFor(modelItem => item.IdEleccion)</td>
 								<td>
-									<button class="btn btn-link" onclick="mostrarObservacion('@item.IdVotante')">Observación</button>
+									<button class="btn btn-link" onclick="mostrarObservacion('@item.IdVotante')" id="btnObservacion">Observación</button>
 								</td>
+
 							</tr>
 						}
 					</tbody>
@@ -127,15 +122,13 @@ else if (User.IsInRole("2"))
 
 	<!-- Formulario de Observación con cuadro de comentario más pequeño -->
 	<div id="observacionForm" style="display: none; max-width: 300px; margin: auto; position: fixed; left: 0; top: 50%; transform: translateY(-50%);">
-		<h5>Observación</h5>
 		<form id="comentarioForm">
 			<!-- Agrega un campo oculto para almacenar la identificación del votante -->
 			<input type="hidden" id="idVotanteObservacion" />
 
 			<div class="form-group">
-				<label for="observacion">Comentario:</label>
 				<!-- Ajusta el tamaño del textarea -->
-				<textarea class="form-control" id="observacion" name="observacion" rows="2"></textarea>
+				<textarea  placeholder="Escriba su Observacion" class="form-control" id="observacion" name="observacion" rows="2"></textarea>
 			</div>
 			<div class="form-group">
 				<button type="button" class="btn btn-sm btn-primary" onclick="enviarComentario()">Enviar</button>
@@ -175,22 +168,36 @@ else if (User.IsInRole("2"))
 
 
 	<script>
-	function mostrarObservacion(idVotante) {
-		// Mostrar el formulario de observación
-		document.getElementById("observacionForm").style.display = "block";
-	}
+		function mostrarObservacion(idVotante) {
+			// Obtén el botón de observación por su ID
+			var btnObservacion = document.getElementById('btnObservacion');
 
-	function cancelarComentario() {
-		// Ocultar el formulario de observación
-		document.getElementById("observacionForm").style.display = "none";
-	}
+			// Obtén el formulario de observación por su ID
+			var observacionForm = document.getElementById('observacionForm');
 
-	function enviarComentario() {
-		// Aquí puedes agregar lógica para enviar el comentario por correo u otro medio
-		// Puedes acceder al contenido del comentario con document.getElementById("observacion").value
+			// Asigna el ID del votante al campo oculto en el formulario
+			document.getElementById('idVotanteObservacion').value = idVotante;
 
-		// Después de enviar el comentario, oculta el formulario
-		cancelarComentario();
-	}
+			// Muestra el formulario
+			observacionForm.style.display = 'block';
+
+			// Ajusta la posición del formulario debajo del botón de observación
+			var rect = btnObservacion.getBoundingClientRect();
+			observacionForm.style.left = rect.left + 'px';
+			observacionForm.style.top = rect.bottom + 'px';
+		}
+
+		function cancelarComentario() {
+			// Oculta el formulario al cancelar
+			document.getElementById('observacionForm').style.display = 'none';
+		}
+
+		// Agrega la lógica de enviar comentario según tus necesidades
+		function enviarComentario() {
+			// Puedes implementar aquí la lógica para enviar el comentario
+			// y luego ocultar el formulario
+			cancelarComentario();
+		}
 	</script>
+
 }

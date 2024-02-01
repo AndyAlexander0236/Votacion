@@ -15,22 +15,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Votacion.Controllers
 {
-	public class LoginController : Controller
-	{
-		private readonly IServicioUsuario _ServicioUsuario;
-		private readonly IServicioImagen _ServicioImagen;
+    public class LoginController : Controller
+    {
+        private readonly IServicioUsuario _ServicioUsuario;
+        private readonly IServicioImagen _ServicioImagen;
         private readonly IServicioLista _ServicioLista;
         private readonly LibreriaContext _context;
 
 
-		public LoginController(IServicioUsuario ServicioUsuario,
-			IServicioImagen ServicioImagen, IServicioLista ServicioLista, LibreriaContext context)
-		{
-			_ServicioUsuario = ServicioUsuario;
-			_ServicioImagen = ServicioImagen;
+        public LoginController(IServicioUsuario ServicioUsuario,
+            IServicioImagen ServicioImagen, IServicioLista ServicioLista, LibreriaContext context)
+        {
+            _ServicioUsuario = ServicioUsuario;
+            _ServicioImagen = ServicioImagen;
             _ServicioLista = ServicioLista;
             _context = context;
-		}
+        }
 
         public async Task<IActionResult> Lista()
         {
@@ -41,17 +41,17 @@ namespace Votacion.Controllers
         }
 
         public IActionResult Registro()
-		{
+        {
 
-			return View();
-		}
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Registro(Usuario Usuario, IFormFile Imagen, int IdRol)
         {
-           	
-			// Validar si no se ha seleccionado una imagen
-			if (Imagen == null || Imagen.Length == 0)
+
+            // Validar si no se ha seleccionado una imagen
+            if (Imagen == null || Imagen.Length == 0)
             {
                 ViewData["Mensaje"] = "Es necesario subir una foto.";
                 return View();
@@ -74,7 +74,7 @@ namespace Votacion.Controllers
 
             // Asignar el rol seleccionado al usuario
             Usuario.IdRol = IdRol;
-            
+
 
             // Validar y asignar la lista de roles al modelo
             Usuario.Rol = _context.Roles.Select(e => new SelectListItem
@@ -84,10 +84,10 @@ namespace Votacion.Controllers
             }).ToList();
 
 
-			//Siempre se registrara como un Usuario 
-			Usuario.IdRol = 2;
+            //Siempre se registrara como un Usuario 
+            Usuario.IdRol = 2;
 
-			Usuario usuarioCreado = await _ServicioUsuario.SaveUsuario(Usuario);
+            Usuario usuarioCreado = await _ServicioUsuario.SaveUsuario(Usuario);
 
             if (usuarioCreado.IdUsuario > 0)
             {
@@ -108,16 +108,16 @@ namespace Votacion.Controllers
 
 
         public IActionResult IniciarSesion()
-		{
-			var roles = _context.Roles.Select(e => new SelectListItem
-			{
-				Value = e.IdRol.ToString(),
-				Text = e.Rol
-			}).ToList();
+        {
+            var roles = _context.Roles.Select(e => new SelectListItem
+            {
+                Value = e.IdRol.ToString(),
+                Text = e.Rol
+            }).ToList();
 
-			ViewData["Roles"] = roles;
-			return View();
-		}
+            ViewData["Roles"] = roles;
+            return View();
+        }
 
 
         [HttpPost]
@@ -181,13 +181,13 @@ namespace Votacion.Controllers
         }
 
         public async Task<IActionResult> CerrarSesion()
-		{
-			await HttpContext.SignOutAsync();
-			return Redirect("IniciarSesion");
-		}
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("IniciarSesion");
+        }
 
 
 
-	}
+    }
 
 }
