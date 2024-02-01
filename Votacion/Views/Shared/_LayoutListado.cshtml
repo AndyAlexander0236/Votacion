@@ -32,14 +32,14 @@
 
 							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
 						</li>
+						@if (!User.IsInRole("2"))
+						{
+							<li class="nav-item">
 
-					@*	<li class="nav-item">
-							@if (!User.IsInRole("1"))
-							{
-								<a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListadoUsuario">Usuario</a>
-							}
-						</li>*@
+								<a class="nav-link text-dark" asp-area="" asp-controller="usuario" asp-action="listadousuario">usuario</a>
 
+							</li>
+						}
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Candidato" asp-action="ListadoCandidato">Candidatos</a>
 						</li>
@@ -51,13 +51,13 @@
 						</li>
 
 						<li class="nav-item">
-							
-								<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
-							
+
+							<a class="nav-link text-dark" asp-area="" asp-controller="Votante" asp-action="ListadoVotante">Votantes</a>
+
 						</li>
 					</ul>
 
-				
+
 
 
 				</div>

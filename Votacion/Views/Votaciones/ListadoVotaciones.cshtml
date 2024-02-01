@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Votacion.Models.Entidades.Votaciones>
 
 @{
-    ViewData["Title"] = "ListadoVotaciones";
+	ViewData["Title"] = "ListadoVotaciones";
 }
 <link rel="stylesheet" href="/css/estilo_votacion.css">
 
 @if (User.IsInRole("1"))
 {
-	
+
 	<p>
 		<a onclick="showInPopup('@Url.Action("Crear", "Votaciones", new { id = 0 })', 'Agregar una Votacion')"
 		   class="btn btn-sm btn-primary text-white">
@@ -32,35 +32,30 @@
 							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Editar  /  Eliminar</th>
 
-							
-
-						
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						@foreach (var item in Model)
+						@foreach (var votacion in Model)
 						{
 							<tr>
-								<th scope="row">@item.IdVotacion</th>
-								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
-								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
-								
+								<td>@votacion.IdVotacion</td>
+								<td>@(votacion.Candidato != null ? $"{votacion.Candidato.NombreCandidato} {votacion.Candidato.ApellidoCandidato}" : "Sin Candidato")</td>
+								<td>@(votacion.Eleccion != null ? votacion.Eleccion.Descripcion : "Sin Descripcion")</td>
 
-
-						
+								<td>@votacion.FechaRegistro</td>
+								<!-- Agrega más celdas según tus propiedades -->
 								<td>
-									<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
-                                new { id = item.IdVotacion }, Context.Request.Scheme)' ,
+								<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
+                                new { id = votacion.IdVotacion }, Context.Request.Scheme)' ,
                                   'Actualizar Votacion')" class="btn btn-outline-warning btn-sm">
-										<i class="fa fa-pencil-alt"></i>
-									</a>
-									<button data-id="@item.IdVotacion"
-											class="btn btn-outline-danger btn-sm deleteItem"
-											data-bs-toggle="modal" data-bs-target="#deleteDialog">
-										<i class="fa fa-trash"></i>
-									</button>
+									<i class="fa fa-pencil-alt"></i>
+								</a>
+								<button data-id="@votacion.IdVotacion"
+										class="btn btn-outline-danger btn-sm deleteItem"
+										data-bs-toggle="modal" data-bs-target="#deleteDialog">
+									<i class="fa fa-trash"></i>
+								</button>
 								</td>
 							</tr>
 						}
@@ -104,18 +99,17 @@ else if (User.IsInRole("2"))
 						</tr>
 					</thead>
 					<tbody>
-						@foreach (var item in Model)
+						@foreach (var votacion in Model)
 						{
 							<tr>
-								<th scope="row">@item.IdVotacion</th>
-								<td>@Html.DisplayFor(modelItem => item.Candidato.NombreCandidato)</td>
-								<td>@Html.DisplayFor(modelItem => item.Eleccion.Descripcion)</td>
-								<td>@Html.DisplayFor(modelItem => item.FechaRegistro)</td>
+								<td>@votacion.IdVotacion</td>
+								<td>@(votacion.Candidato != null ? $"{votacion.Candidato.NombreCandidato} {votacion.Candidato.ApellidoCandidato}" : "Sin Candidato")</td>
+								<td>@(votacion.Eleccion != null ? votacion.Eleccion.Descripcion : "Sin Descripcion")</td>
 
+								<td>@votacion.FechaRegistro</td>
+								<!-- Agrega más celdas según tus propiedades -->
+								<td>
 								
-
-
-
 							</tr>
 						}
 					</tbody>
@@ -178,6 +172,13 @@ else if (User.IsInRole("2"))
 	<script>
 		sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Votaciones/Eliminar/', false);
 	</script>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- DataTables -->
+	<script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+
 
 	<script src="/js/validacion.js"></script>
 

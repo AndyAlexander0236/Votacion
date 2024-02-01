@@ -21,6 +21,7 @@ namespace Votacion.Controllers
             string nombreUsuario = "";
             string fotoPerfil = "";
 
+
             if (claimsUser.Identity.IsAuthenticated)
             {
                 nombreUsuario = claimsUser.Claims.Where(c => c.Type == ClaimTypes.Name)

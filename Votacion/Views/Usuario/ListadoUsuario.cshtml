@@ -33,6 +33,7 @@
 							<th scope="col">Apellidos</th>
 							<th scope="col">Correo</th>
 							<th scope="col">Clave</th>
+							<th scope="col">Foto Usuario</th>
 							<th scope="col">Rol</th>
 							<th scope="col">Editar / Eliminar</th>
 						</tr>
@@ -47,6 +48,9 @@
 								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
+								<td>
+									<img src="@Html.DisplayFor(modelItem => item.URLFotoPerfil)" style="width: 200px; height: 200px;" />
+								</td>
 								<td>@Html.DisplayFor(modelItem => item.IdRol)</td>
 
 								<td>
@@ -85,6 +89,7 @@ else if (User.IsInRole(""))
 							<th scope="col">Apellidos</th>
 							<th scope="col">Correo</th>
 							<th scope="col">Clave</th>
+							<th scope="col">Foto Usuario</th>
 							<th scope="col">Rol</th>
 						</tr>
 					</thead>
@@ -98,6 +103,9 @@ else if (User.IsInRole(""))
 								<td>@Html.DisplayFor(modelItem => item.ApellidoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.CorreoUsuario)</td>
 								<td>@Html.DisplayFor(modelItem => item.ClaveUsuario)</td>
+								<td>
+									<img src="@Html.DisplayFor(modelItem => item.URLFotoPerfil)" style="width: 200px; height: 200px;" />
+								</td>
 								<td>@Html.DisplayFor(modelItem => item.IdRol)</td>
 							</tr>
 						}

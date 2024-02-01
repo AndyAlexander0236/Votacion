@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Votacion.Models;
 using Votacion.Models.Entidades;
@@ -20,12 +21,28 @@ namespace Votacion.Controllers
 
 		public async Task<IActionResult> ListadoVotaciones()
 		{
-			var votaciones = await _context.Votaciones.ToListAsync();
-			return View(votaciones);
+			// Obtener todas las votaciones con datos relacionados
+			var votacionesConDatosRelacionados = await _context.Votaciones
+				.Include(v => v.Candidato)
+				.Include(v => v.Eleccion)
+				.Include(v => v.Votante)
+				.ToListAsync();
+
+			return View(votacionesConDatosRelacionados);
 		}
 
 		public IActionResult Crear()
 		{
+
+			var elecciones = _context.Elecciones
+	   .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+	   .ToList();
+
+			var candidato = new Candidato
+			{
+				Elecciones = elecciones
+			};
+
 			CargarListasDesplegables();
 			return View();
 		}
@@ -36,8 +53,8 @@ namespace Votacion.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Crear(Votaciones votacion)
 		{
-			if (ModelState.IsValid)
-			{
+			//if (ModelState.IsValid)
+			//{
 				try
 				{
 					// Lógica para guardar la votación en la base de datos
@@ -50,12 +67,21 @@ namespace Votacion.Controllers
 				{
 					ModelState.AddModelError(String.Empty, $"Ha ocurrido un error: {ex.Message}");
 				}
-			}
+			//}
 
 			// Recargar las listas desplegables en caso de que haya errores de validación
 			CargarListasDesplegables();
+
+
+			// Recargar la lista de elecciones en caso de error
+			votacion.Elecciones = _context.Elecciones
+				.Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+				.ToList();
+
 			return View(votacion);
 		}
+
+
 
 		// Método privado para cargar las listas desplegables necesarias para el formulario
 		private void CargarListasDesplegables()

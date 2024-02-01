@@ -16,7 +16,8 @@ namespace Votacion.Models.Entidades
 
 
 		// Clave foránea candidato
-		public Candidato? Candidato { get; set; }
+		[ForeignKey("IdCandidato")]
+		public virtual Candidato Candidato { get; set; }
 
 		[Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar un Candidato.")]
 		public int IdCandidato { get; set; }
@@ -26,8 +27,8 @@ namespace Votacion.Models.Entidades
 
 
 		// Clave foránea eleccion
-
-		public Eleccion? Eleccion { get; set; }
+		[ForeignKey("IdEleccion")]
+		public virtual Eleccion Eleccion { get; set; }
 
 		[Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una Eleccion.")]
 		public int IdEleccion { get; set; }
@@ -46,7 +47,7 @@ namespace Votacion.Models.Entidades
 		[NotMapped]
 		public IEnumerable<SelectListItem> Votantes { get; set; }
 
-
+	
 
 
 		//// Nuevas propiedades para el candidato

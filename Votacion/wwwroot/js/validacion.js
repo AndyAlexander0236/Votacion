@@ -39,3 +39,13 @@
 
 			});
 		}
+
+
+$(document).ready(function () {
+	$('#Votaciones').DataTable({
+		"columns": [
+			null, // Columna 1
+			null, // Columna 2
+		]
+	});
+});

@@ -76,14 +76,6 @@ namespace Votacion.Controllers
             Usuario.IdRol = IdRol;
 
 
-            // Validar y asignar la lista de roles al modelo
-            Usuario.Rol = _context.Roles.Select(e => new SelectListItem
-            {
-                Value = e.IdRol.ToString(),
-                Text = e.Rol
-            }).ToList();
-
-
             //Siempre se registrara como un Usuario 
             Usuario.IdRol = 2;
 
