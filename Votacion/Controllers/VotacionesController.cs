@@ -10,221 +10,219 @@ using Votacion.Models.Entidades;
 
 namespace Votacion.Controllers
 {
-	public class VotacionesController : Controller
-	{
-		private readonly LibreriaContext _context;
+    public class VotacionesController : Controller
+    {
+        private readonly LibreriaContext _context;
 
-		public VotacionesController(LibreriaContext context)
-		{
-			_context = context;
-		}
+        public VotacionesController(LibreriaContext context)
+        {
+            _context = context;
+        }
 
-		public async Task<IActionResult> ListadoVotaciones()
-		{
-			// Obtener todas las votaciones con datos relacionados
-			var votacionesConDatosRelacionados = await _context.Votaciones
-				.Include(v => v.Candidato)
-				.Include(v => v.Eleccion)
-				.Include(v => v.Votante)
-				.ToListAsync();
+        public async Task<IActionResult> ListadoVotaciones()
+        {
+            // Obtener todas las votaciones con datos relacionados
+            var votacionesConDatosRelacionados = await _context.Votaciones
+                .Include(v => v.Candidato)
+                .Include(v => v.Eleccion)
+                .Include(v => v.Votante)
+                .ToListAsync();
 
-			return View(votacionesConDatosRelacionados);
-		}
+            return View(votacionesConDatosRelacionados);
+        }
 
-		public IActionResult Crear()
-		{
+        public IActionResult Crear()
+        {
 
-			var elecciones = _context.Elecciones
-	   .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
-	   .ToList();
+            var elecciones = _context.Elecciones
+       .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+       .ToList();
 
-			var candidato = new Candidato
-			{
-				Elecciones = elecciones
-			};
+            var candidato = new Candidato
+            {
+                Elecciones = elecciones
+            };
 
-			CargarListasDesplegables();
-			return View();
-		}
-
-		
-
-		// Método en el controlador para manejar la solicitud POST después de enviar el formulario de creación
-		[HttpPost]
-		public async Task<IActionResult> Crear(Votaciones votacion)
-		{
-			//if (ModelState.IsValid)
-			//{
-				try
-				{
-					// Lógica para guardar la votación en la base de datos
-					_context.Add(votacion);
-					await _context.SaveChangesAsync();
-					TempData["AlertMessage"] = "Votacion creada exitosamente";
-					return RedirectToAction("ListadoVotaciones");
-				}
-				catch (Exception ex)
-				{
-					ModelState.AddModelError(String.Empty, $"Ha ocurrido un error: {ex.Message}");
-				}
-			//}
-
-			// Recargar las listas desplegables en caso de que haya errores de validación
-			CargarListasDesplegables();
-
-
-			// Recargar la lista de elecciones en caso de error
-			votacion.Elecciones = _context.Elecciones
-				.Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
-				.ToList();
-
-			return View(votacion);
-		}
+            CargarListasDesplegables();
+            return View();
+        }
 
 
 
-		// Método privado para cargar las listas desplegables necesarias para el formulario
-		private void CargarListasDesplegables()
-		{
-			ViewData["Candidatos"] = new SelectList(_context.Candidatos
-				.Select(c => new { IdCandidato = c.IdCandidato, NombreCompleto = $"{c.NombreCandidato} {c.ApellidoCandidato}" }), "IdCandidato", "NombreCompleto");
+        // Método en el controlador para manejar la solicitud POST después de enviar el formulario de creación
+        [HttpPost]
+        public async Task<IActionResult> Crear(Votaciones votacion)
+        {
+            //if (ModelState.IsValid)
+            //{
+            try
+            {
+                // Lógica para guardar la votación en la base de datos
+                _context.Add(votacion);
+                await _context.SaveChangesAsync();
+                TempData["AlertMessage"] = "Votacion creada exitosamente";
+                return RedirectToAction("ListadoVotaciones");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(String.Empty, $"Ha ocurrido un error: {ex.Message}");
+            }
+            //}
 
-			ViewData["Elecciones"] = new SelectList(_context.Elecciones
-				.Select(e => new { IdEleccion = e.IdEleccion, Descripcion = e.Descripcion }), "IdEleccion", "Descripcion");
-		}
-
-
-
-		[HttpGet]
-		public async Task<IActionResult> Editar(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
-
-			var votaciones = await _context.Votaciones.FindAsync(id);
-
-			if (votaciones == null)
-			{
-				return NotFound();
-			}
-
-			CargarListasDesplegables();
-			return View(votaciones);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Editar(int id, Votaciones votaciones)
-		{
-			if (id != votaciones.IdVotacion)
-			{
-				return NotFound();
-			}
-
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(votaciones);
-					await _context.SaveChangesAsync();
-					TempData["AlertMessage"] = "Votacion actualizada exitosamente";
-					return RedirectToAction("ListadoVotaciones");
-				}
-				catch (Exception ex)
-				{
-					ModelState.AddModelError(String.Empty, $"Ha ocurrido un error: {ex.Message}");
-				}
-			}
-
-			CargarListasDesplegables();
-			return View(votaciones);
-		}
+            // Recargar las listas desplegables en caso de que haya errores de validación
+            CargarListasDesplegables();
 
 
-		[HttpPost]
-		public IActionResult ValidarDocumento(string documentoIdentidad)
-		{
-			var votante = _context.Votantes.FirstOrDefault(v => v.DocumentoIdentidad == documentoIdentidad);
+            // Recargar la lista de elecciones en caso de error
+            votacion.Elecciones = _context.Elecciones
+                .Select(e => new SelectListItem { Value = e.IdEleccion.ToString(), Text = e.Descripcion })
+                .ToList();
 
-			if (votante != null)
-			{
-				return Json(new { success = true, nombreVotante = votante.NombreVotante });
-			}
-			else
-			{
-				return Json(new { success = false });
-			}
-		}
+            return View(votacion);
+        }
 
 
 
-		//EDITAR FECHA DE REGISTRO
-		[HttpPost]
-		public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
-		{
-			var votaciones = await _context.Votaciones.FindAsync(id);
+        // Método privado para cargar las listas desplegables necesarias para el formulario
+        private void CargarListasDesplegables()
+        {
+            ViewData["Candidatos"] = new SelectList(_context.Candidatos
+                .Select(c => new { IdCandidato = c.IdCandidato, NombreCompleto = $"{c.NombreCandidato} {c.ApellidoCandidato}" }), "IdCandidato", "NombreCompleto");
 
-			if (votaciones == null)
-			{
-				return NotFound();
-			}
+            ViewData["Elecciones"] = new SelectList(_context.Elecciones
+                .Select(e => new { IdEleccion = e.IdEleccion, Descripcion = e.Descripcion }), "IdEleccion", "Descripcion");
 
-			try
-			{
-				votaciones.FechaRegistro = nuevaFechaRegistro;
-				_context.Update(votaciones);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {votaciones.FechaRegistro}.";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
-			}
-
-			return RedirectToAction(nameof(ListadoVotaciones));
-		}
+            ViewData["Votantes"] = new SelectList(_context.Votantes
+                .Select(c => new { IdVotante = c.IdVotante, EmitioVoto = $"{c.NombreVotante} {c.ApellidoVotante}" }), "IdVotante", "EmitioVoto");
+        }
 
 
 
-		//APARTADO DE ELIMINAR
-		public async Task<IActionResult> Eliminar(int? id)
-		{
-			if (id == null || _context.Usuarios == null)
-			{
-				return View();
-			}
+        [HttpGet]
+        public async Task<IActionResult> Editar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			var usuario = await _context.Usuarios
-				.FirstOrDefaultAsync(m => m.IdUsuario == id);
+            var votacion = await _context.Votaciones
+                .Include(v => v.Candidato)
+                .Include(v => v.Eleccion)
+                .Include(v => v.Votante)
+                .FirstOrDefaultAsync(m => m.IdVotacion == id);
 
-			if (usuario == null)
-			{
-				return NotFound();
-			}
+            if (votacion == null)
+            {
+                return NotFound();
+            }
 
-			try
-			{
-				_context.Usuarios.Remove(usuario);
-				await _context.SaveChangesAsync();
-				TempData["AlertMessage"] = "Votacion eliminado exitosamente!!";
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError(ex.Message, "Ocurrio un error, no se pudo eliminar el registro");
+            CargarListasDesplegables();
+            return View(votacion);
+        }
 
-			}
+        [HttpPost]
+        public async Task<IActionResult> Editar(int id, Votaciones votacion)
+        {
+            if (id != votacion.IdVotacion)
+            {
+                return NotFound();
+            }
 
-			return RedirectToAction(nameof(ListadoVotaciones));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(votacion);
+                    await _context.SaveChangesAsync();
+                    TempData["AlertMessage"] = "Votación actualizada exitosamente";
+                    return RedirectToAction(nameof(ListadoVotaciones));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Ha ocurrido un error: {ex.Message}");
+                }
+            }
 
-		}
+            CargarListasDesplegables();
+            return View(votacion);
+        }
+
+
+        [HttpPost]
+        public IActionResult ValidarDocumento(string documentoIdentidad)
+        {
+            var votante = _context.Votantes.FirstOrDefault(v => v.DocumentoIdentidad == documentoIdentidad);
+
+            if (votante != null)
+            {
+                return Json(new { success = true, nombreVotante = votante.NombreVotante });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
 
 
 
-	}
+        //EDITAR FECHA DE REGISTRO
+        [HttpPost]
+        public async Task<IActionResult> CambiarFechaRegistro(int id, DateTime nuevaFechaRegistro)
+        {
+            var votaciones = await _context.Votaciones.FindAsync(id);
+
+            if (votaciones == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                votaciones.FechaRegistro = nuevaFechaRegistro;
+                _context.Update(votaciones);
+                await _context.SaveChangesAsync();
+                TempData["AlertMessage"] = $"Fecha de registro cambiada exitosamente a: {votaciones.FechaRegistro}.";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(ex.Message, "Ocurrió un error al cambiar la fecha de registro");
+            }
+
+            return RedirectToAction(nameof(ListadoVotaciones));
+        }
+
+
+
+        public async Task<IActionResult> Eliminar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var votacion = await _context.Votaciones.FindAsync(id);
+
+            if (votacion == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Votaciones.Remove(votacion);
+                await _context.SaveChangesAsync();
+                TempData["AlertMessage"] = "Votación eliminada exitosamente!!";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Ocurrió un error: {ex.Message}");
+            }
+
+            return RedirectToAction(nameof(ListadoVotaciones));
+        }
+
+
+
+    }
 }
-
-
-
-		
-

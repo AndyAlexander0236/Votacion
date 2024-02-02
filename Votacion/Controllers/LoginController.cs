@@ -77,7 +77,7 @@ namespace Votacion.Controllers
 
 
             //Siempre se registrara como un Usuario 
-            Usuario.IdRol = 1;
+            Usuario.IdRol = 2;
 
             Usuario usuarioCreado = await _ServicioUsuario.SaveUsuario(Usuario);
 

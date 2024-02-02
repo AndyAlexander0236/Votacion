@@ -29,6 +29,7 @@
 							<th scope="col">#</th>
 							<th scope="col">Candidato </th>
 							<th scope="col">Eleccion </th>
+							<th scope="col">Emitio Voto </th>
 							<th scope="col">Fecha de Registro</th>
 							<th scope="col">Editar  /  Eliminar</th>
 
@@ -42,20 +43,19 @@
 								<td>@votacion.IdVotacion</td>
 								<td>@(votacion.Candidato != null ? $"{votacion.Candidato.NombreCandidato} {votacion.Candidato.ApellidoCandidato}" : "Sin Candidato")</td>
 								<td>@(votacion.Eleccion != null ? votacion.Eleccion.Descripcion : "Sin Descripcion")</td>
-
+								<td>@(votacion.Votante != null ? $"{votacion.Votante.NombreVotante} {votacion.Votante.ApellidoVotante}" : "Sin Votante")</td>
 								<td>@votacion.FechaRegistro</td>
 								<!-- Agrega más celdas según tus propiedades -->
 								<td>
-								<a onclick="showInPopup('@Url.Action("Editar", "Eleccion",
-                                new { id = votacion.IdVotacion }, Context.Request.Scheme)' ,
-                                  'Actualizar Votacion')" class="btn btn-outline-warning btn-sm">
-									<i class="fa fa-pencil-alt"></i>
-								</a>
-								<button data-id="@votacion.IdVotacion"
-										class="btn btn-outline-danger btn-sm deleteItem"
-										data-bs-toggle="modal" data-bs-target="#deleteDialog">
-									<i class="fa fa-trash"></i>
-								</button>
+									<a href="@Url.Action("Editar", "Eleccion", new { id = votacion.IdVotacion })" class="btn btn-outline-warning btn-sm">
+										<i class="fa fa-pencil-alt"></i>
+									</a>
+
+									<button data-id="@votacion.IdVotacion"
+											class="btn btn-outline-danger btn-sm deleteItem"
+											data-bs-toggle="modal" data-bs-target="#deleteDialog">
+										<i class="fa fa-trash"></i>
+									</button>
 								</td>
 							</tr>
 						}
@@ -92,6 +92,7 @@ else if (User.IsInRole("2"))
 							<th scope="col">#</th>
 							<th scope="col">Candidato </th>
 							<th scope="col">Eleccion </th>
+							<th scope="col">Emitio Voto </th>
 							<th scope="col">Fecha de Registro</th>
 
 
@@ -105,11 +106,11 @@ else if (User.IsInRole("2"))
 								<td>@votacion.IdVotacion</td>
 								<td>@(votacion.Candidato != null ? $"{votacion.Candidato.NombreCandidato} {votacion.Candidato.ApellidoCandidato}" : "Sin Candidato")</td>
 								<td>@(votacion.Eleccion != null ? votacion.Eleccion.Descripcion : "Sin Descripcion")</td>
-
+								<td>@(votacion.Votante != null ? $"{votacion.Votante.NombreVotante} {votacion.Votante.ApellidoVotante}" : "Sin Votante")</td>
 								<td>@votacion.FechaRegistro</td>
 								<!-- Agrega más celdas según tus propiedades -->
 								<td>
-								
+
 							</tr>
 						}
 					</tbody>
