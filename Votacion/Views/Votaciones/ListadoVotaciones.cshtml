@@ -47,10 +47,7 @@
 								<td>@votacion.FechaRegistro</td>
 								<!-- Agrega más celdas según tus propiedades -->
 								<td>
-									<a href="@Url.Action("Editar", "Eleccion", new { id = votacion.IdVotacion })" class="btn btn-outline-warning btn-sm">
-										<i class="fa fa-pencil-alt"></i>
-									</a>
-
+									
 									<button data-id="@votacion.IdVotacion"
 											class="btn btn-outline-danger btn-sm deleteItem"
 											data-bs-toggle="modal" data-bs-target="#deleteDialog">
